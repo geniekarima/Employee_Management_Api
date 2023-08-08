@@ -1,0 +1,32 @@
+@host = http://127.0.0.1:8000/api
+
+@token =
+##get user
+GET {{host}}/auth/user HTTP/1.1
+Content-Type: application/json
+
+
+{
+
+}
+
+################
+## login user
+POST {{host}}/auth/login HTTP/1.1
+Content-Type: application/json
+app-role: owner
+
+{
+  "email": "owner@gmail.com",
+  "password": "12345678"
+
+}
+################
+## Logout
+POST {{host}}/auth/logout HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
