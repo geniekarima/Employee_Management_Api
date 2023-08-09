@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
- use App\Services\Interface\AuthInterface;
+use App\Services\Interface\AuthInterface;
+use App\Http\Resources\EmployeeResource;
+use App\Notifications\EmployeeAddNotification;
 
 class AuthRepository implements AuthInterface
 {
@@ -51,10 +52,10 @@ class AuthRepository implements AuthInterface
     {
         try {
             if (!Auth::user())
-                return Base::fail('User not logged in'); // DONE
+                return Base::fail('User not logged in');
             $user = Auth::user()->token();
             $user->revoke();
-            return Base::pass('Logout successfully'); // DONE
+            return Base::pass('Logout successfully');
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -70,7 +71,7 @@ class AuthRepository implements AuthInterface
 
             $data = [
                 'id' => $user->id,
-                'username' => $user->name,
+                'username' => $user->username,
                 'email' => $user->email,
                 'usertype' => $user->usertype,
             ];
@@ -78,5 +79,36 @@ class AuthRepository implements AuthInterface
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
+    }
+
+    public function addEmployee($request, $usertype){
+        try {
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'usertype' => 'employee'
+            ]);
+
+            //  if (!$user->success)  return Base::fail('User not Created!');
+
+            $messages = [
+                'username' => $user->username,
+                'password' => "Your password is: " . $request->password,
+            ];
+            $user->notify(new EmployeeAddNotification($messages));
+
+            $accessToken = $user->createToken('authToken')->accessToken;
+
+            $data = [
+                 'token' => $accessToken,
+                 'user' => new EmployeeResource($user),
+            ];
+            return Base::pass('User registered successfully', $data);
+
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
     }
 }

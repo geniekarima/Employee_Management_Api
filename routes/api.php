@@ -27,4 +27,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     //logout
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+    //add-employee
+    Route::post('/add-employee', [AuthController::class, 'addEmployee'])->middleware(['auth:api', 'usertype:owner|employee']);
 });
