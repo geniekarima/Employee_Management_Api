@@ -1,14 +1,11 @@
 @host = http://127.0.0.1:8000/api
 
-@token =
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYjNiYzdjZjlkNzc3Mzc2ZmE2YzUyODUyN2I0NGJjOWU4MGQ1MjNmMmYyNmMzNDJjMDY2YjJkMWVjNWYyY2IyMTZkNzJjNGNjZTIyZGY2MzgiLCJpYXQiOjE2OTE1NjU2NDYuOTQxMDQ4LCJuYmYiOjE2OTE1NjU2NDYuOTQxMDUxLCJleHAiOjE3MjMxODgwNDYuOTMzODEzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.NOrY4D20LYS3EAaqyQnAQXGfkPjsx0V51cq5MX12nnuKmUQh9kTIQ7izbxqTcHXvsZBbWJHFU1IZ9zH_xl0otGGZZQZRW-SojkiCe91ffQQAkEmwtx1ZgY_FbpLp4-M70NKp0qJG6b9_gs7o-CF2PciIvFeQdChWKpU9Nfhxpdq3r0KHT-6S-7Cc39h1IGYC4Htd9XzV0mYSB7-B7DXgOjKaCGkjdzf3I2qkwh8SdinsyyVfwvFByg98AmiTbAcD7sLe-kNizdSJgfJ0CK7okBzpHDvRNBxDVE5zCd6RuRRLNHaSDnRRB4nmGDQ1oAx9O6vsYe65_9HJylX14j65nGSbgClLkw17gIYQ7hhmNp63CbksmEDP44HiWtMbXOxrj2L89HVcvA2r99XaZLHteOWXTf0WBqNbG9yY7u6kPquBy-NilGVMZu0Fm2FKDoo2LE2wj_PnumlNp8zurJBsbsvgMFmwhmxxAEeoETHpIkvhvGOiBDr35HHt7n7IrRoHlN048Qb_phKYA0L_o0V9ZLerw5jXBQWSnCNoL8oBwqFg2sA6tYGCwQHw0FzNxwQz2I0f7-iY9eoqv1S1u4KtEwIh_VSgex_KwGVOpjDwhAb1k4fs6RYwUVjnLtf0JO7BZ0qZZvR0A_pMfVphtPK6IFm-X1YymNyOz10SHhXv9yk
 ##get user
 GET {{host}}/auth/user HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
-
-{
-
-}
 
 ################
 ## login user
@@ -21,6 +18,7 @@ app-role: owner
   "password": "12345678"
 
 }
+
 ################
 ## Logout
 POST {{host}}/auth/logout HTTP/1.1
@@ -30,3 +28,20 @@ Authorization: Bearer {{token}}
 {
 
 }
+
+################
+## Employee Add
+POST {{host}}/auth/add-employee HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+# app-role: employee
+
+{
+
+  "username": "karima1",
+  "email": "karima1@gmail.com",
+  "password": "123456"
+
+}
+
+
