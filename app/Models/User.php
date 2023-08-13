@@ -23,9 +23,13 @@ class User extends Authenticatable
         'password',
         'usertype',
     ];
+    // public function employees()
+    // {
+    //     return $this->hasMany(EmployeeReport::class);
+    // }
     public function employees(): HasMany
     {
-        return $this->hasMany(User::class, 'owner_id');
+        return $this->hasMany(EmployeeReport::class,);
     }
 
     /**
