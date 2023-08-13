@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-Route::post('login', function () {
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('login', function () {
     return 'WRONG';
 })->name('login');

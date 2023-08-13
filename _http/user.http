@@ -1,0 +1,61 @@
+@host = http://127.0.0.1:8000/api
+
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZGM2YTI5Y2ExNmJhYThmODlkOGU5Mzc0NThhMTVmZDIxMzNkM2NhMDM4NGZiYjg4MjgyMjY0NzdjZmQ4ZmMwNmQzZjdiNzQzMjNiNGE1NTYiLCJpYXQiOjE2OTE5MjY3NzkuOTg1MjY0LCJuYmYiOjE2OTE5MjY3NzkuOTg1MjY2LCJleHAiOjE3MjM1NDkxNzkuOTc3MDE5LCJzdWIiOiI5Iiwic2NvcGVzIjpbXX0.GwkMWx1slYZ4rJ9d650ffOdofSFmral4tN_4K73DplmNzxDSKyCziDfePEtRS_HSFRFvdcvT7ryh752gDmMt72D5dzSEoWoEgMvzeqAspW0aLS8ft08UUCbjzKSycs9PDTFyGrK9alunru7LtyEPOkmOM_LborAujaqGAZE2V_kH-W2sYYGUuto606v0lp0MjOT529-Af6Sph4M4MvcpfXKJ_CTNkB1t4a-0CwsIrrqpyeFDgxQUirF-3XkBS012LRqJvRY_ELn4wOfy9CkH69zJIrHgjYfA0aobXq7CrGunENYVmLOrUpLiCmSQVhTQf6f3u2NpVMAaFOWgsdpU5KDB_U2Wm01uhKwTof6Inyy9gw2TIq8FJt8j26dRqLi-GLR2yFn3U_ErMbcyl_7tY3YQPI2bils8VxNhe983T6l6kHNtPo9W61avU4DtJmCO81eKSJrR1PP1ekvJHkBm0CIpAP5ZM5HRJ5PzsTRMk5sdez19Yw3kYQkfcDKiVGiWE6X2p9hdu4YJ40QD00d7d4H7RVd3CkfeVwGn1Ng9rRi9rjtgr0gDA2VWXm0tfoqIhH_SUcK4cDUv9L82NtB16p7VUR4txt_CxzpKi9DotEXbnh6-y5Z4-qQbRTVe9bMRzbhYJIRTjatF6GpoRjCl_DRoje6lNQUi9_NYAiSUZA8
+##get user
+GET {{host}}/auth/user HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+################
+## login user
+POST {{host}}/auth/login HTTP/1.1
+Content-Type: application/json
+app-role: employee
+
+{
+  "email": "moon@gmail.com",
+  "password": "123456"
+
+}
+
+################
+## Logout
+POST {{host}}/auth/logout HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
+
+################
+## Check In
+POST {{host}}/employee/checkin HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+
+
+}
+
+################
+## Check out
+POST {{host}}/employee/checkout HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+
+
+}
+
+
+
+
+
+
+
