@@ -81,7 +81,8 @@ class AuthRepository implements AuthInterface
         }
     }
 
-    public function addEmployee($request, $usertype){
+    public function addEmployee($request, $usertype)
+    {
         try {
             $user = User::create([
                 'username' => $request->username,
@@ -101,8 +102,8 @@ class AuthRepository implements AuthInterface
             $accessToken = $user->createToken('authToken')->accessToken;
 
             $data = [
-                 'token' => $accessToken,
-                 'user' => new EmployeeResource($user),
+                'token' => $accessToken,
+                'user' => new EmployeeResource($user),
             ];
             return Base::pass('User registered successfully', $data);
 

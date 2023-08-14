@@ -8,7 +8,11 @@ interface OwnerEmployeeInterface
 {
     public function employeeList();
     public function employeeReportList(Request $request);
+    public function employeeReportListFromDate(Request $request);
     public function individualReportList(Request $request);
+    public function generatePDF(Request $request);
+    public function generateIndividualPDF(Request $request);
+
     public function checkIn(Request $request);
     public function checkOut(Request $request);
 }
