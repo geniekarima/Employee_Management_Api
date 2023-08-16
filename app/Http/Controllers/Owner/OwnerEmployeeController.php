@@ -57,44 +57,4 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
     }
-
-    public function employeeReportListFromDate(Request $request)
-    {
-        try {
-            $reports = $this->ownerEmployeeRepository->employeeReportListFromDate($request, request()->header('app_role'));
-            return $reports->success ? Base::success($reports->message, $reports->data) : Base::error($reports->message);
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-    }
-    public function individualReportList(Request $request)
-    {
-        try {
-            $reports = $this->ownerEmployeeRepository->individualReportList($request, request()->header('app_role'));
-            return $reports->success ? Base::success($reports->message, $reports->data) : Base::error($reports->message);
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-
-    }
-    public function generatePDF(Request $request)
-    {
-        try {
-            $reports = $this->ownerEmployeeRepository->generatePDF($request, request()->header('app_role'));
-            return $reports->success ? Base::success($reports->message, $reports->data) : Base::error($reports->message);
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-
-    }
-    public function generateIndividualPDF(Request $request)
-    {
-        try {
-            $reports = $this->ownerEmployeeRepository->generateIndividualPDF($request, request()->header('app_role'));
-            return $reports->success ? Base::success($reports->message, $reports->data) : Base::error($reports->message);
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-
-    }
 }

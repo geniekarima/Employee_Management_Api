@@ -96,162 +96,95 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
-    // for any specific date filter
 
     public function employeeReportList(Request $request)
     {
         try {
-            $date = $request->input('todate');
-
-            if (empty($date)) {
-                $date = date("Y-m-d");
-            } else {
-                $date = date("Y-m-d", strtotime($date));
-            }
-
-            $reports = EmployeeReport::with('user')
-                ->whereDate('date', $date)
-                ->latest()
-                ->get();
-            return Base::pass('Employee Report List for ' . $date, $reports);
-
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-    }
-
-    public function employeeReportListFromDate(Request $request)
-    {
-        try {
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
-            if (empty($fromDate)) {
-                $fromDate = date("Y-m-d");
-            } else {
-                $fromDate = date("Y-m-d", strtotime($fromDate));
-            }
-
-            if (empty($toDate)) {
-                $toDate = date("Y-m-d");
-            } else {
-                $toDate = date("Y-m-d", strtotime($toDate));
-            }
-
-            if (strtotime($fromDate) > strtotime($toDate)) {
-                $tempDate = $fromDate;
-                $fromDate = $toDate;
-                $toDate = $tempDate;
-            }
-
-            $reports = EmployeeReport::with('user')
-                ->whereBetween('date', [$fromDate, $toDate])
-                ->latest()
-                ->get();
-
-            // if ($reports->isEmpty()) {
-            //     return Base::fail('No reports found for the specified date range');
+            // $reports = EmployeeReport::with('user');
+            // $msg = "";
+            // if (!empty($fromDate) && !empty($toDate)) {
+            //     $fromDate = date("Y-m-d", strtotime($fromDate));
+            //     $toDate = date("Y-m-d", strtotime($toDate));
+            //     $reports = $reports->whereDate('date', '>=', $fromDate);
+            //     $reports = $reports->whereDate('date', '<=', $toDate);
+            //     $msg = ' from ' . $fromDate . ' to ' . $toDate;
+            // } elseif (!empty($fromDate)) {
+            //     $reports = $reports->whereDate('date', '>=', $fromDate);
+            //     $msg = ' from ' . $fromDate;
+            // } else {
+            //     $toDate = date("Y-m-d");
+            //     $reports = $reports->whereDate('date', $toDate);
+            //     $msg = ' for ' . $toDate;
             // }
 
-            return Base::pass('Employee Report List from ' . $fromDate . ' to ' . $toDate, $reports);
+            $username = "";
+            // // For individual employee report list
+            if (!empty($request->employee_id)) {
+                // $reports = $reports->where('employee_id', $request->employee_id);
 
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-    }
-
-
-
-    public function individualReportList(Request $request)
-    {
-        try {
-            $reports = EmployeeReport::where('employee_id', $request->employee_id)->get();
-
-            if (!$reports)
-                return Base::error('Employee not found!');
-            return Base::pass('Employee Report List', $reports);
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
-    }
-    // generate pdf
-    public function generatePDF(Request $request)
-    {
-        try {
-
-            $fromDate = $request->input('fromdate');
-            $toDate = $request->input('todate');
-
-            if (empty($fromDate)) {
-                $fromDate = date("Y-m-d");
-            } else {
-                $fromDate = date("Y-m-d", strtotime($fromDate));
+                //showing employee name in blade file
+                $username = User::where('id', $request->employee_id)->value('username');
             }
-
-            if (empty($toDate)) {
-                $toDate = date("Y-m-d");
-            } else {
-                $toDate = date("Y-m-d", strtotime($toDate));
-            }
-
-            if (strtotime($fromDate) > strtotime($toDate)) {
-                $tempDate = $fromDate;
-                $fromDate = $toDate;
-                $toDate = $tempDate;
-            }
+            // $reports = $reports->latest()
+            //     ->get();
 
             $reports = EmployeeReport::with('user')
-                ->whereBetween('date', [$fromDate, $toDate])
-                ->latest()
-                ->get();
+            ->when(isset($request->fromdate), function($q) use ($request){
+                return $q->where('date', '>=', $request->fromdate);
+            })
+            ->when(isset($request->todate), function($q) use ($request){
+                return $q->where('date', '<=', $request->todate);
+            })
+            ->when(isset($request->employee_id), function($q) use ($request){
+                return $q->where('employee_id', $request->employee_id);
+            })
+            ->latest()
+            ->get();
 
             if ($reports->isEmpty()) {
-                return Base::fail('No reports found for the specified date range');
+                return Base::fail('No reports found for this date');
             }
+            $allData = null;
+            if($request->is_pdf == 1){
+                $pdf = PDF::loadView('employee_report', [
+                    'fromDate' => $fromDate,
+                    'toDate' => $toDate,
+                    'reports' => $reports,
+                    'username' => $username,
+                ]);
 
+                $filename = 'employees_report_' . date('YmdHis') . '.pdf';
+
+                $pdfPath = public_path('pdfs/' . $filename);
+                $pdf->save($pdfPath);
+
+                $pdfUrl = asset('pdfs/' . $filename);
+                $allData['pdf_url'] = $pdfUrl;
+            }
+            $allData['reports'] = $reports;
             // Generate PDF
-            $pdf = PDF::loadView('employee_report', [
-                'fromDate' => $fromDate,
-                'toDate' => $toDate,
-                'reports' => $reports,
-            ]);
 
-            $filename = 'employees_report_' . date('YmdHis') . '.pdf';
+            // $allData = [
+            //     'pdf_url' => $pdfUrl,
+            //     'reports' => $reports
+            // ];
+            $msg = '';
 
-            $pdfPath = public_path('pdfs/' . $filename);
-            $pdf->save($pdfPath);
-
-            $pdfUrl = asset('pdfs/' . $filename);
-
-            return Base::pass('PDF generated and available for download', ['pdf_url' => $pdfUrl]);
+            return Base::pass('Employee Report List' . $msg . ' and PDF available for download', $allData);
 
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
     }
 
-public function generateIndividualPDF(Request $request)
-{
-    try {
-        $reports = EmployeeReport::where('employee_id', $request->employee_id)->get();
 
-        if (!$reports) {
-            return Base::error('Employee not found!');
-        }
 
-        $pdf = PDF::loadView('individual_report', ['reports' => $reports]);
 
-        $filename = 'employee_report_' . $request->employee_id . '.pdf';
 
-        $pdfPath = public_path('pdfs/' . $filename);
-        $pdf->save($pdfPath);
 
-        $pdfUrl = asset('pdfs/' . $filename);
 
-        return Base::pass('Employee Report List pdf', ['pdf_link' => $pdfUrl]);
-    } catch (Exception $e) {
-        return Base::exception_fail($e);
-    }
-}
 
 }

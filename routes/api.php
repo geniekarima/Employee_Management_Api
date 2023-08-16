@@ -41,12 +41,8 @@ Route::prefix('employee')->group(function () {
     Route::post('/checkout', [OwnerEmployeeController::class, 'checkOut'])->middleware(['auth:api', 'usertype:employee']);
     //report-list any specific date filter
     Route::get('/report', [OwnerEmployeeController::class, 'employeeReportList'])->middleware(['auth:api', 'usertype:owner']);
-    //from date filter
-    Route::get('/report-fromdate', [OwnerEmployeeController::class, 'employeeReportListFromDate'])->middleware(['auth:api', 'usertype:owner']);
     //Individual report-list
     Route::get('/individual', [OwnerEmployeeController::class, 'individualReportList'])->middleware(['auth:api', 'usertype:owner']);
-    //generate pdf
-    Route::get('generate-pdf', [OwnerEmployeeController::class, 'generatePDF'])->middleware(['auth:api', 'usertype:owner']);
     //generate pdf for individual employee
     Route::get('individual-pdf', [OwnerEmployeeController::class, 'generateIndividualPDF'])->middleware(['auth:api', 'usertype:owner']);
 });

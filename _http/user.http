@@ -1,6 +1,6 @@
 @host = http://127.0.0.1:8000/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZGM2YTI5Y2ExNmJhYThmODlkOGU5Mzc0NThhMTVmZDIxMzNkM2NhMDM4NGZiYjg4MjgyMjY0NzdjZmQ4ZmMwNmQzZjdiNzQzMjNiNGE1NTYiLCJpYXQiOjE2OTE5MjY3NzkuOTg1MjY0LCJuYmYiOjE2OTE5MjY3NzkuOTg1MjY2LCJleHAiOjE3MjM1NDkxNzkuOTc3MDE5LCJzdWIiOiI5Iiwic2NvcGVzIjpbXX0.GwkMWx1slYZ4rJ9d650ffOdofSFmral4tN_4K73DplmNzxDSKyCziDfePEtRS_HSFRFvdcvT7ryh752gDmMt72D5dzSEoWoEgMvzeqAspW0aLS8ft08UUCbjzKSycs9PDTFyGrK9alunru7LtyEPOkmOM_LborAujaqGAZE2V_kH-W2sYYGUuto606v0lp0MjOT529-Af6Sph4M4MvcpfXKJ_CTNkB1t4a-0CwsIrrqpyeFDgxQUirF-3XkBS012LRqJvRY_ELn4wOfy9CkH69zJIrHgjYfA0aobXq7CrGunENYVmLOrUpLiCmSQVhTQf6f3u2NpVMAaFOWgsdpU5KDB_U2Wm01uhKwTof6Inyy9gw2TIq8FJt8j26dRqLi-GLR2yFn3U_ErMbcyl_7tY3YQPI2bils8VxNhe983T6l6kHNtPo9W61avU4DtJmCO81eKSJrR1PP1ekvJHkBm0CIpAP5ZM5HRJ5PzsTRMk5sdez19Yw3kYQkfcDKiVGiWE6X2p9hdu4YJ40QD00d7d4H7RVd3CkfeVwGn1Ng9rRi9rjtgr0gDA2VWXm0tfoqIhH_SUcK4cDUv9L82NtB16p7VUR4txt_CxzpKi9DotEXbnh6-y5Z4-qQbRTVe9bMRzbhYJIRTjatF6GpoRjCl_DRoje6lNQUi9_NYAiSUZA8
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYmViODIzMTFiN2I3YjgzMWVjZmFhNjQyNjI4OWFjYzZiYWY2ZDNiOTBjYmI1MmU4MmNhODUwNTA3MmYxMGU4YmMwMmI1YjFjZGQ4Y2Q3ZDUiLCJpYXQiOjE2OTIxODI1NzIuMjI3MzU2LCJuYmYiOjE2OTIxODI1NzIuMjI3MzU4LCJleHAiOjE3MjM4MDQ5NzIuMjE4Nzg3LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.dr55D7PkBPGzUflISJuAUlOdiWmelwga6a6i0uGmXZLs7tBEaR35QwDwPDy3nSuYHEtNqdWNd8ZayBDztNVd2dhi_VLja9Y2E0-rWXSABKQT1DZPhH1Rd7jjHSka-dyiVO0nQ2K5GkUpJSGqb2PGtFqln7ay9FnX5mRL0FsudXSfCQ-CITD_JhLwkfpXabVTwJr9tMm_KLpWcsSXmybE8-PK27LNozT1Tmxm8zZMsh85iaRFk4LzCJpo2aIjFJ3f-d219GVpHR8v46cNWyHxbbwMTwopP4PX4Oam1hCeIKBmEQ8EdCbJng7dxBAGlRuTV_ylQK4NnI6eBAJnEZHFua6FoGnMB_DDETdf-DT_fQt5bTEfopGV8akTiOI8Pb6GrlzukJkR7z_MzagQGRiY5zn4hbrKp3bu4dKhyyPaCc2ZmmNwxlAdWdsnXbeqODqYtiJRTpBOuSeM7AZlpA_1HmCZvb6BecnZg51s1JLaIFBfxJ2bdZYe5GIBGXKcUR3xULWcxaskgSwbp4NL73V7C57rjokJkd9_lvFS0Wc--2IuZMDIShEYBkV796qru6kIFFSyyEWonsgHnUnIDPpQ15AegIpJexaYdXX_yK2a8t1Boz6-s8f982hhBb1wjdPCYeULkEgfwoPh3YLPlWo5eV4ygYWg-wRLo7LYBQKg7gw
 ##get user
 GET {{host}}/auth/user HTTP/1.1
 Content-Type: application/json
@@ -14,7 +14,7 @@ Content-Type: application/json
 app-role: employee
 
 {
-  "email": "moon@gmail.com",
+  "email": "karima@gmail.com",
   "password": "123456"
 
 }
@@ -52,6 +52,19 @@ app-role: employee
 
 
 }
+
+
+# ################
+# ## Employee Report List
+# GET {{host}}/employee/report HTTP/1.1
+# Content-Type: application/json
+# Authorization: Bearer {{token}}
+# app-role: employee
+
+# {
+#      "fromdate":"2023-08-10"
+     
+# }
 
 
 
