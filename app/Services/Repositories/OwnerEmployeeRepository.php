@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\Interface\OwnerEmployeeInterface;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendpdfNotification;
 use App\Models\EmployeeReport;
 
 
@@ -103,52 +105,30 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
-            // $reports = EmployeeReport::with('user');
-            // $msg = "";
-            // if (!empty($fromDate) && !empty($toDate)) {
-            //     $fromDate = date("Y-m-d", strtotime($fromDate));
-            //     $toDate = date("Y-m-d", strtotime($toDate));
-            //     $reports = $reports->whereDate('date', '>=', $fromDate);
-            //     $reports = $reports->whereDate('date', '<=', $toDate);
-            //     $msg = ' from ' . $fromDate . ' to ' . $toDate;
-            // } elseif (!empty($fromDate)) {
-            //     $reports = $reports->whereDate('date', '>=', $fromDate);
-            //     $msg = ' from ' . $fromDate;
-            // } else {
-            //     $toDate = date("Y-m-d");
-            //     $reports = $reports->whereDate('date', $toDate);
-            //     $msg = ' for ' . $toDate;
-            // }
-
-            $username = "";
-            // // For individual employee report list
-            if (!empty($request->employee_id)) {
-                // $reports = $reports->where('employee_id', $request->employee_id);
-
-                //showing employee name in blade file
-                $username = User::where('id', $request->employee_id)->value('username');
-            }
-            // $reports = $reports->latest()
-            //     ->get();
-
             $reports = EmployeeReport::with('user')
-            ->when(isset($request->fromdate), function($q) use ($request){
-                return $q->where('date', '>=', $request->fromdate);
-            })
-            ->when(isset($request->todate), function($q) use ($request){
-                return $q->where('date', '<=', $request->todate);
-            })
-            ->when(isset($request->employee_id), function($q) use ($request){
-                return $q->where('employee_id', $request->employee_id);
-            })
-            ->latest()
-            ->get();
+                ->when(isset($request->fromdate), function ($q) use ($request) {
+                    return $q->where('date', '>=', $request->fromdate);
+                })
+                ->when(isset($request->todate), function ($q) use ($request) {
+                    return $q->where('date', '<=', $request->todate);
+                })
+                ->when(isset($request->employee_id), function ($q) use ($request) {
+                    return $q->where('employee_id', $request->employee_id);
+                })
+                ->latest()
+                ->get();
 
             if ($reports->isEmpty()) {
                 return Base::fail('No reports found for this date');
             }
+            // // For individual employee name show in blade file
+            $username = "";
+            if (!empty($request->employee_id)) {
+                $username = User::where('id', $request->employee_id)->value('username');
+            }
+            
             $allData = null;
-            if($request->is_pdf == 1){
+            if ($request->is_pdf == 1) {
                 $pdf = PDF::loadView('employee_report', [
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
@@ -162,29 +142,18 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 $pdf->save($pdfPath);
 
                 $pdfUrl = asset('pdfs/' . $filename);
+
+                $email = $request->email;
+
+                Notification::route('mail', $email)->notify(new SendpdfNotification($pdfPath));
+
                 $allData['pdf_url'] = $pdfUrl;
             }
             $allData['reports'] = $reports;
-            // Generate PDF
-
-            // $allData = [
-            //     'pdf_url' => $pdfUrl,
-            //     'reports' => $reports
-            // ];
-            $msg = '';
-
-            return Base::pass('Employee Report List' . $msg . ' and PDF available for download', $allData);
+            return Base::pass('Employee Report List and PDF available for download', $allData);
 
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
     }
-
-
-
-
-
-
-
-
 }
