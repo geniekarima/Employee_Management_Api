@@ -1,6 +1,6 @@
 @host = http://127.0.0.1:8000/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYmViODIzMTFiN2I3YjgzMWVjZmFhNjQyNjI4OWFjYzZiYWY2ZDNiOTBjYmI1MmU4MmNhODUwNTA3MmYxMGU4YmMwMmI1YjFjZGQ4Y2Q3ZDUiLCJpYXQiOjE2OTIxODI1NzIuMjI3MzU2LCJuYmYiOjE2OTIxODI1NzIuMjI3MzU4LCJleHAiOjE3MjM4MDQ5NzIuMjE4Nzg3LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.dr55D7PkBPGzUflISJuAUlOdiWmelwga6a6i0uGmXZLs7tBEaR35QwDwPDy3nSuYHEtNqdWNd8ZayBDztNVd2dhi_VLja9Y2E0-rWXSABKQT1DZPhH1Rd7jjHSka-dyiVO0nQ2K5GkUpJSGqb2PGtFqln7ay9FnX5mRL0FsudXSfCQ-CITD_JhLwkfpXabVTwJr9tMm_KLpWcsSXmybE8-PK27LNozT1Tmxm8zZMsh85iaRFk4LzCJpo2aIjFJ3f-d219GVpHR8v46cNWyHxbbwMTwopP4PX4Oam1hCeIKBmEQ8EdCbJng7dxBAGlRuTV_ylQK4NnI6eBAJnEZHFua6FoGnMB_DDETdf-DT_fQt5bTEfopGV8akTiOI8Pb6GrlzukJkR7z_MzagQGRiY5zn4hbrKp3bu4dKhyyPaCc2ZmmNwxlAdWdsnXbeqODqYtiJRTpBOuSeM7AZlpA_1HmCZvb6BecnZg51s1JLaIFBfxJ2bdZYe5GIBGXKcUR3xULWcxaskgSwbp4NL73V7C57rjokJkd9_lvFS0Wc--2IuZMDIShEYBkV796qru6kIFFSyyEWonsgHnUnIDPpQ15AegIpJexaYdXX_yK2a8t1Boz6-s8f982hhBb1wjdPCYeULkEgfwoPh3YLPlWo5eV4ygYWg-wRLo7LYBQKg7gw
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZDcyYWY2NzMyZmM1ZTAyOGQ1YWFkZWY1N2MwMzY1ZWY2OWRlYWQ2MjYzMDdlNjkzZDAwZjJhYTkzN2IyZmU4ODVmMGYxYjM2MWU2ODQ4ZTYiLCJpYXQiOjE2OTI0Mjc4NzAuMDQzNzIzLCJuYmYiOjE2OTI0Mjc4NzAuMDQzNzI2LCJleHAiOjE3MjQwNTAyNjkuODE4NDQ4LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.VkfMd-2x60G4AHaBviyI5lQPi3R5vRYfGh4qkWcvr0SyGys1wudi4BcViwKl_JrPr8leuxj34CDosC43TA-8dxELJuTvT_aiXePgxDD3CHfu245FyiUI45SEnM3ePGRml5JLUDwikGPkZpTZ69QKaPMltXxQ-s4ZehTiWrAFv5_VdraOkh8yetQMn5bI4_m5SLuYA6XmCIduAsTFFLatLAMTnrq83-sTTKIUH0aid1geARDl-5N-g_kbsxTH2n9mDCbX6LDlJhNiqeoc5z0qxYnMrNr4VHq3pA2Cn0bNVkwqH9iE1EetXJI2kCfrv2B5MpEz3LaQXq4us851Gd58d2oSlmhFj7Vu8u-tkGxpm3mP_tVw8hsnZOsY1iuygknB7_J3e5wYWvUgaq8y42G0r5T9qyGxhB2QBbNvE6sIm4Yviyu1KMLtDQM7_bY8G1Aw40SPBOwhgGl9m-qj3rDIoTIgOiAkQ3S7sufdWfYO6nmK3hCRPbP-GI_HXGN7nEV00AKCPvBjeUXjljupXcCP7xUXfkZ1oeGSOMcidDCA-FD8O85ezrlpGkHGN-4PKpp2xqx-aUu9dejAnQ4EU1YVCROCBVvuw7OY_DROj8tKzn1sMh8Y4Wwu7q9sA1sPhMcWKeuvDV158-PJ-gV_Cpe31vUPspPhcancfWe9_xAX9tA
 ##get user
 GET {{host}}/auth/user HTTP/1.1
 Content-Type: application/json
@@ -42,6 +42,30 @@ app-role: employee
 }
 
 ################
+## Start Break
+POST {{host}}/employee/start-break HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+
+
+}
+
+################
+## End Break
+POST {{host}}/employee/end-break HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+
+
+}
+
+################
 ## Check out
 POST {{host}}/employee/checkout HTTP/1.1
 Content-Type: application/json
@@ -52,19 +76,6 @@ app-role: employee
 
 
 }
-
-
-# ################
-# ## Employee Report List
-# GET {{host}}/employee/report HTTP/1.1
-# Content-Type: application/json
-# Authorization: Bearer {{token}}
-# app-role: employee
-
-# {
-#      "fromdate":"2023-08-10"
-     
-# }
 
 
 

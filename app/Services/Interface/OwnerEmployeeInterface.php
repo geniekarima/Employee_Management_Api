@@ -9,5 +9,7 @@ interface OwnerEmployeeInterface
     public function employeeList();
     public function employeeReportList(Request $request);
     public function checkIn(Request $request);
+    public function startBreak(Request $request);
+    public function endBreak(Request $request);
     public function checkOut(Request $request);
 }

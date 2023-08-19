@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\Interface\OwnerEmployeeInterface;
+use Carbon\CarbonInterval;
+use App\Models\EmployeeBreak;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendpdfNotification;
 use App\Models\EmployeeReport;
@@ -76,6 +78,69 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+    public function startBreak(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            $employeeCheckin = EmployeeReport::where('employee_id', $user->id)
+                ->whereNull('check_out')
+                ->latest()
+                ->first();
+
+            if (!$employeeCheckin) {
+                return Base::fail('No check-in found');
+            }
+            if (EmployeeBreak::where('employee_id', $employeeCheckin->id)->whereNull('break_end')->exists()){
+             return Base::fail('Break has already been started');
+            }
+
+            $break = new EmployeeBreak();
+            $break->employee_id = $employeeCheckin->id;
+            $break->break_start = Base::now();
+            $break->save();
+
+            return Base::pass('Break started Successfully', $break);
+
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+
+    public function endBreak(Request $request){
+        try {
+            $user = Auth::user();
+
+            $employeeCheckin = EmployeeReport::where('employee_id',$user->id)
+            ->whereNull('check_out')
+            ->latest()
+            ->first();
+
+            if(!$employeeCheckin){
+                return Base::fail('No check-in found');
+            }
+            $break = EmployeeBreak::where('employee_id',$employeeCheckin->id)->whereNull('break_end')
+            ->latest()->first();
+
+            if(!$break){
+                return Base::fail('No break found or break has already been ended');
+            }
+            $break->break_end = Base::now();
+
+           // calculate break duration
+            $breakStart = Carbon::parse($break->break_start);
+            $breakEnd = Carbon::parse($break->break_end);
+            $breakDurationInMinutes = $breakEnd->diffForHumans($breakStart);
+            //$breakDurationHuman = CarbonInterval::minutes($breakDurationInMinutes)->cascade()->forHumans();
+            // $break->break_duration = $breakDurationHuman;
+            $break->save();
+            return Base::pass('Break Ended Successfully', $break);
+
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
     public function checkOut(Request $request)
     {
         try {
@@ -126,7 +191,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             if (!empty($request->employee_id)) {
                 $username = User::where('id', $request->employee_id)->value('username');
             }
-            
+
             $allData = null;
             if ($request->is_pdf == 1) {
                 $pdf = PDF::loadView('employee_report', [

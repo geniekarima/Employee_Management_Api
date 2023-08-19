@@ -37,6 +37,10 @@ Route::prefix('employee')->group(function () {
     Route::get('/list', [OwnerEmployeeController::class, 'employeeList'])->middleware(['auth:api', 'usertype:owner']);
     //checkin
     Route::post('/checkin', [OwnerEmployeeController::class, 'checkIn'])->middleware(['auth:api', 'usertype:employee']);
+    //start-break
+    Route::post('/start-break', [OwnerEmployeeController::class, 'startBreak'])->middleware(['auth:api', 'usertype:employee']);
+    //end-break
+    Route::post('/end-break', [OwnerEmployeeController::class, 'endBreak'])->middleware(['auth:api', 'usertype:employee']);
     //checkout
     Route::post('/checkout', [OwnerEmployeeController::class, 'checkOut'])->middleware(['auth:api', 'usertype:employee']);
     //report-list any specific date filter
