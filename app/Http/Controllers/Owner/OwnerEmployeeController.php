@@ -47,6 +47,26 @@ class OwnerEmployeeController extends Controller
         }
 
     }
+    public function startBreak(Request $request)
+    {
+        try {
+            $break = $this->ownerEmployeeRepository->startBreak($request, request()->header('app_role'));
+            return $break->success ? Base::success($break->message, $break->data) : Base::error($break->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function endBreak(Request $request)
+    {
+        try {
+            $break = $this->ownerEmployeeRepository->endBreak($request, request()->header('app_role'));
+            return $break->success ? Base::success($break->message, $break->data) : Base::error($break->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
 
     public function employeeReportList(Request $request)
     {
