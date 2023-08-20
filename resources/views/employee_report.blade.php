@@ -81,7 +81,8 @@
                     <td>{{ $report->user->username }}</td>
                     <td>{{ $report->check_in }}</td>
                     <td>{{ $report->check_out }}</td>
-                    <td>{{ $report->office_hours }}</td>
+                    <td>@if(!empty($report->net_work_hours)){{ $report->net_work_hours }}@endif</td>
+                    {{-- <td>{{ $report->office_hours }}</td> --}}
                 </tr>
             @endforeach
         </tbody>
