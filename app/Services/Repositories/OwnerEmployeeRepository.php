@@ -66,12 +66,18 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $checkIn->check_in = Base::now();
             $checkIn->date = date('Y-m-d');
 
-            $startTime = Carbon::parse($checkIn->check_in);
-            $endTime = Carbon::parse(date("H:i:s"));
-            $hoursDifference = $endTime->diffInHours($startTime);
-            $checkIn->office_hours = $hoursDifference;
-            $checkIn->save();
+            // $startTime = Carbon::parse($checkIn->check_in);
+            // $endTime = Carbon::parse(date("H:i:s"));
+            // $hoursDifference = $endTime->diffInHours($startTime);
 
+
+            // $startTime = Carbon::parse($checkIn->check_in);
+            // // $endTime = Carbon::parse(date("H:i:s"));
+            // $endTime = Carbon::parse($checkIn->check_out);
+            // $officeDurationInSeconds = $endTime->diffInSeconds($startTime);
+            // $officeDurationInSeconds = CarbonInterval::seconds($officeDurationInSeconds)->cascade()->forHumans();
+
+            $checkIn->save();
             return Base::pass('Check In Successfully', $checkIn);
 
         } catch (Exception $e) {
@@ -91,12 +97,12 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             if (!$employeeCheckin) {
                 return Base::fail('No check-in found');
             }
-            if (EmployeeBreak::where('employee_id', $employeeCheckin->id)->whereNull('break_end')->exists()){
-             return Base::fail('Break has already been started');
+            if (EmployeeBreak::where('employee_report_id', $employeeCheckin->id)->whereNull('break_end')->exists()) {
+                return Base::fail('Break has already been started');
             }
 
             $break = new EmployeeBreak();
-            $break->employee_id = $employeeCheckin->id;
+            $break->employee_report_id = $employeeCheckin->id;
             $break->break_start = Base::now();
             $break->save();
 
@@ -107,32 +113,38 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
         }
     }
 
-    public function endBreak(Request $request){
+    public function endBreak(Request $request)
+    {
         try {
             $user = Auth::user();
 
-            $employeeCheckin = EmployeeReport::where('employee_id',$user->id)
-            ->whereNull('check_out')
-            ->latest()
-            ->first();
+            $employeeCheckin = EmployeeReport::where('employee_id', $user->id)
+                ->whereNull('check_out')
+                ->latest()
+                ->first();
 
-            if(!$employeeCheckin){
+            if (!$employeeCheckin) {
                 return Base::fail('No check-in found');
             }
-            $break = EmployeeBreak::where('employee_id',$employeeCheckin->id)->whereNull('break_end')
-            ->latest()->first();
+            $break = EmployeeBreak::where('employee_report_id', $employeeCheckin->id)->whereNull('break_end')
+                ->latest()->first();
 
-            if(!$break){
+            if (!$break) {
                 return Base::fail('No break found or break has already been ended');
             }
+            // $break->employee_report_id = $employeeCheckin->id;
+
+            // calculate break duration
+            // $totalBreakHoursInSeconds = 0;
+            // foreach ($break as $break) {
+            //     $breakStart = Carbon::parse($break->break_start);
+            //     $breakEnd = Carbon::parse($break->break_end);
+            //     $breakDurationInSeconds = $breakEnd->diffInSeconds($breakStart);
+            //     $totalBreakHoursInSeconds += $breakDurationInSeconds;
+            //     $totalBreakHoursInSeconds = CarbonInterval::seconds($totalBreakHoursInSeconds)->cascade()->forHumans();
+            // }
             $break->break_end = Base::now();
 
-           // calculate break duration
-            $breakStart = Carbon::parse($break->break_start);
-            $breakEnd = Carbon::parse($break->break_end);
-            $breakDurationInMinutes = $breakEnd->diffForHumans($breakStart);
-            //$breakDurationHuman = CarbonInterval::minutes($breakDurationInMinutes)->cascade()->forHumans();
-            // $break->break_duration = $breakDurationHuman;
             $break->save();
             return Base::pass('Break Ended Successfully', $break);
 
@@ -155,6 +167,9 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 return Base::fail('No previous check-in found');
             }
 
+            if (EmployeeBreak::where('employee_report_id', $employeeCheckin->id)->whereNull('break_end')->exists()) {
+                return Base::fail('Cannot check out while breaks are ongoing');
+            }
             $employeeCheckin->check_out = Base::now();
             $employeeCheckin->save();
             return Base::pass('Check out Successfully', $employeeCheckin);
@@ -163,14 +178,13 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
-
     public function employeeReportList(Request $request)
     {
         try {
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
-            $reports = EmployeeReport::with('user')
+            $reports = EmployeeReport::with('user', 'breakTasks')
                 ->when(isset($request->fromdate), function ($q) use ($request) {
                     return $q->where('date', '>=', $request->fromdate);
                 })
@@ -183,15 +197,18 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 ->latest()
                 ->get();
 
+                foreach ($reports as $report) {
+                    $report['net_work_hours'] = $report;
+                }
+
             if ($reports->isEmpty()) {
                 return Base::fail('No reports found for this date');
             }
-            // // For individual employee name show in blade file
+
             $username = "";
             if (!empty($request->employee_id)) {
                 $username = User::where('id', $request->employee_id)->value('username');
             }
-
             $allData = null;
             if ($request->is_pdf == 1) {
                 $pdf = PDF::loadView('employee_report', [

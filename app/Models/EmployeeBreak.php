@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeeBreak extends Model
 {
     use HasFactory;
-    protected $fillable = ['break_start', 'break_end', 'break_duration', 'total_hours'];
+    protected $fillable = ['break_start', 'break_end'];
 
     public function employeeReport()
     {
-        return $this->belongsTo(EmployeeReport::class,'employee_id', 'id');
+        return $this->belongsTo(EmployeeReport::class,'employee_report_id', 'id');
     }
 
 }

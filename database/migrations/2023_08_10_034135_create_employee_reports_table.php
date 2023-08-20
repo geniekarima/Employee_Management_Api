@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date')->nullable();
             $table->time('check_in');
             $table->time('check_out')->nullable();
-            $table->float('office_hours')->nullable();
+            // $table->float('office_hours')->nullable();
             $table->timestamps();
         });
     }
