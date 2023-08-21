@@ -7,10 +7,8 @@ use App\Models\User;
 use App\Traits\Base;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\Interface\OwnerEmployeeInterface;
-use Carbon\CarbonInterval;
 use App\Models\EmployeeBreak;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendpdfNotification;
@@ -65,18 +63,6 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $checkIn->employee_id = $employeeId;
             $checkIn->check_in = Base::now();
             $checkIn->date = date('Y-m-d');
-
-            // $startTime = Carbon::parse($checkIn->check_in);
-            // $endTime = Carbon::parse(date("H:i:s"));
-            // $hoursDifference = $endTime->diffInHours($startTime);
-
-
-            // $startTime = Carbon::parse($checkIn->check_in);
-            // // $endTime = Carbon::parse(date("H:i:s"));
-            // $endTime = Carbon::parse($checkIn->check_out);
-            // $officeDurationInSeconds = $endTime->diffInSeconds($startTime);
-            // $officeDurationInSeconds = CarbonInterval::seconds($officeDurationInSeconds)->cascade()->forHumans();
-
             $checkIn->save();
             return Base::pass('Check In Successfully', $checkIn);
 
@@ -132,17 +118,6 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             if (!$break) {
                 return Base::fail('No break found or break has already been ended');
             }
-            // $break->employee_report_id = $employeeCheckin->id;
-
-            // calculate break duration
-            // $totalBreakHoursInSeconds = 0;
-            // foreach ($break as $break) {
-            //     $breakStart = Carbon::parse($break->break_start);
-            //     $breakEnd = Carbon::parse($break->break_end);
-            //     $breakDurationInSeconds = $breakEnd->diffInSeconds($breakStart);
-            //     $totalBreakHoursInSeconds += $breakDurationInSeconds;
-            //     $totalBreakHoursInSeconds = CarbonInterval::seconds($totalBreakHoursInSeconds)->cascade()->forHumans();
-            // }
             $break->break_end = Base::now();
 
             $break->save();
@@ -196,10 +171,6 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 })
                 ->latest()
                 ->get();
-
-                foreach ($reports as $report) {
-                    $report['net_work_hours'] = $report;
-                }
 
             if ($reports->isEmpty()) {
                 return Base::fail('No reports found for this date');

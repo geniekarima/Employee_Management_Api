@@ -14,9 +14,7 @@ class EmployeeReportResource extends JsonResource
      */
     public function toArray(Request $request)
     {
-        // return parent::toArray($request);
         return [
-            // 'id' => $this->id,
             'username' => $this->user->username,
             'date' => $this->date,
             'check_in' => $this->check_in,

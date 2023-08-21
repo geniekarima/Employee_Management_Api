@@ -23,12 +23,6 @@ class EmployeeReport extends Model
 
     public function getNetWorkHoursAttribute()
     {
-        // $checkIn = Carbon::parse($this->check_in);
-        // $checkOut = Carbon::parse($this->check_out);
-
-        // $checkIn = Carbon::parse($this->checkIn->check_in);
-        // $checkOut = Carbon::parse(date("H:i:s"));
-
         $checkIn = Carbon::createFromFormat('H:i:s', $this->check_in);
         $checkOut = Carbon::createFromFormat('H:i:s', $this->check_out);
 
@@ -41,8 +35,13 @@ class EmployeeReport extends Model
         });
 
         $netWorkMinutes = $workDurationInMinutes - $totalBreakMinutes;
+        // $interval =  CarbonInterval::minutes($netWorkMinutes);
 
+        // // Get the hours and remaining minutes from the interval
+        // $hours = $interval->hours;
+        // $remainingMinutes = $interval->minutes;
 
+        // return "Hours: $hours, Minutes: $remainingMinutes";
         $netWorkHours = floor($netWorkMinutes / 60);
         $netWorkRemainingMinutes = $netWorkMinutes % 60;
 
@@ -51,6 +50,3 @@ class EmployeeReport extends Model
     }
 
 }
-
-
-

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-// use App\Services\Interface\AuthInterface;
 use App\Http\Requests\Authentication\LoginRequest;
 use App\Services\Interface\AuthInterface;
 use App\Http\Requests\EmployeeAddRequest;
