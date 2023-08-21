@@ -1,10 +1,10 @@
 @php
-    $msg = "";
+    $msg = '';
     if (!empty($fromDate) && !empty($toDate)) {
         $msg = 'Report List from ' . $fromDate . ' to ' . $toDate;
     } elseif (!empty($fromDate)) {
         $msg = 'Report List from:- ' . $fromDate;
-    }else{
+    } else {
         $msg = 'Report List for:-' . $toDate;
     }
 @endphp
@@ -40,7 +40,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
@@ -62,7 +63,13 @@
 </head>
 
 <body>
-    <h1>@if(!empty($username)){{$username}} 's @else All Employees @endif Monthly Report List</h1>
+    <h1>
+        @if (!empty($username))
+            {{ $username }} 's
+        @else
+            All Employees
+        @endif Monthly Report List
+    </h1>
     <p> {{ $msg }}</p>
     <table>
         <thead>
@@ -71,7 +78,8 @@
                 <th>Employee</th>
                 <th>CheckIn</th>
                 <th>CheckOut</th>
-                <th>Office Hours</th>
+                <th>Working Hours</th>
+                <th>Total Hours</th>
             </tr>
         </thead>
         <tbody>
@@ -79,14 +87,55 @@
                 <tr>
                     <td>{{ $report->date }}</td>
                     <td>{{ $report->user->username }}</td>
-                    <td>{{ $report->check_in }}</td>
-                    <td>{{ $report->check_out }}</td>
-                    <td>@if(!empty($report->net_work_hours)){{ $report->net_work_hours }}@endif</td>
-                    {{-- <td>{{ $report->office_hours }}</td> --}}
+                    <td>{{ \App\Traits\Base::timeParse($report->check_in) }}</td>
+                    <td>{{ \App\Traits\Base::timeParse($report->check_out) }}</td>
+
+                    <td>
+                        @if (!empty($report->net_work_hours))
+                            {{ $report->net_work_hours }}
+                        @endif
+                    </td>
+                    <td>
+                        @if (!empty($report->check_in) && !empty($report->check_out))
+                            @php
+                                $total_duration = \App\Traits\Base::convertDateTime($report->check_in, $report->check_out);
+                            @endphp
+                            {{ $total_duration }}
+                        @endif
+                    </td>
                 </tr>
+                @if ($report->breakTasks != null)
+                    @foreach ($report->breakTasks as $br_report)
+                        <tr>
+                            <td>{{ $report->user->username }} Break time</td>
+                            <td>{{ $report->user->username }}</td>
+                            <td>
+                                @if (!empty($br_report->break_start))
+                                    {{ \App\Traits\Base::timeParse($br_report->break_start) }}
+                                @endif
+                            </td>
+                            <td>
+                                @if (!empty($br_report->break_end))
+                                    {{ \App\Traits\Base::timeParse($br_report->break_end) }}
+                                @endif
+                            </td>
+                            <td>
+                                @if (!empty($br_report->break_start) && !empty($br_report->break_end))
+                                    @php
+                                        $duration = \App\Traits\Base::convertDateTime($br_report->break_start, $br_report->break_end);
+                                    @endphp
+                                    {{ $duration }}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             @endforeach
         </tbody>
     </table>
+    <br>
+    <br>
+</body>
 </body>
 
 </html>

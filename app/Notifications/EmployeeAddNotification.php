@@ -37,8 +37,6 @@ class EmployeeAddNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    // ->line('The introduction to the notification.')
-                    // ->action('Notification Action', url('/'))
                     ->line('Your Username!')
                     ->line($this->messages['username'])
                     ->line('Your new password!')

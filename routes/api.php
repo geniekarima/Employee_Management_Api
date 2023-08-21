@@ -43,25 +43,10 @@ Route::prefix('employee')->group(function () {
     Route::post('/end-break', [OwnerEmployeeController::class, 'endBreak'])->middleware(['auth:api', 'usertype:employee']);
     //checkout
     Route::post('/checkout', [OwnerEmployeeController::class, 'checkOut'])->middleware(['auth:api', 'usertype:employee']);
-    //report-list any specific date filter
+    //report-list all employee
     Route::get('/report', [OwnerEmployeeController::class, 'employeeReportList'])->middleware(['auth:api', 'usertype:owner']);
-    //Individual report-list
-    Route::get('/individual', [OwnerEmployeeController::class, 'individualReportList'])->middleware(['auth:api', 'usertype:owner']);
-    //generate pdf for individual employee
-    Route::get('individual-pdf', [OwnerEmployeeController::class, 'generateIndividualPDF'])->middleware(['auth:api', 'usertype:owner']);
 });
 
-
-
-
-
-
 // Route::middleware('owner')->group(function () {
-//     //Employee add
-//     Route::get('/addemployee',[EmployeeController::class,'addEmployee'])->name('addemployee');
-//     Route::post('/employee/store',[EmployeeController::class,'storeEmployee'])->name('employee.store');
-//     Route::get('/employeeList',[EmployeeController::class,'employeeList'])->name('employeelist');
-//     //Employee report
-//      Route::get('/employee-reports',[EmployeeReportController::class,'index'])->name('employee.reports.index');
-//      Route::get('/single-employee-reports/{id}',[EmployeeReportController::class,'ParticularemployeeList'])->name('single-employee-reports');
+
 // });

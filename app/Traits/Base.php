@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Carbon\CarbonInterval;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Image;
@@ -138,6 +139,22 @@ trait Base
     {
 
         return Carbon::parse($date . ' ' . $time);
+    }
+
+    public static function convertDateTime($start_time, $end_time)
+    {
+        $start_time = self::timeParse($start_time);
+        $end_time = self::timeParse($end_time);
+
+        $checkIn = Carbon::createFromFormat('H:i',$start_time);
+        $checkOut = Carbon::createFromFormat('H:i',$end_time);
+
+        $workDurationInMinutes = CarbonInterval::minutes($checkIn->diffInMinutes($checkOut))->totalMinutes;
+
+        $netWorkHours = floor($workDurationInMinutes / 60);
+        $netWorkRemainingMinutes = $workDurationInMinutes % 60;
+
+        return $netWorkHours . ':' . $netWorkRemainingMinutes;
     }
 
     // public static function generateUDID()
