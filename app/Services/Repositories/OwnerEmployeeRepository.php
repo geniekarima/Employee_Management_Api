@@ -159,6 +159,9 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
+            $sortDirection = $request->input('sort_direction', 'desc');
+             $sortBy = $request->input('sort_by', 'date');
+
             $reports = EmployeeReport::with('user', 'breakTasks')
                 ->when(isset($request->fromdate), function ($q) use ($request) {
                     return $q->where('date', '>=', $request->fromdate);
@@ -169,7 +172,13 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 ->when(isset($request->employee_id), function ($q) use ($request) {
                     return $q->where('employee_id', $request->employee_id);
                 })
-                ->latest()
+                ->when($sortBy === 'date', function ($q) use ($sortDirection) {
+                    return $q->orderBy('date', $sortDirection);
+                })
+                ->when($sortBy === 'username', function ($q) use ($sortDirection) {
+                    return $q->join('users', 'employee_reports.employee_id', '=', 'users.id')
+                        ->orderBy('users.username', $sortDirection);
+                })
                 ->get();
 
             if ($reports->isEmpty()) {
