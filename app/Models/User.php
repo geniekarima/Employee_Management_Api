@@ -22,6 +22,11 @@ class User extends Authenticatable
         'email',
         'password',
         'usertype',
+        'designation',
+        'phone',
+        'address',
+        'image',
+        'birth_date',
     ];
     // public function employees()
     // {

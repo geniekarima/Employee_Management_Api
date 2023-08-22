@@ -1,6 +1,6 @@
 @host = http://127.0.0.1:8000/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZGZlNzdjOTJiMzNkMGY5YWY1YjE2Mzk2MjJjYjRmMzMxNmQ4MDI0MDYzNWJlNDNmMmIxMjQyYWU3ODcwYmMzOTk4MTA5NDYyMjVhNzNlMGEiLCJpYXQiOjE2OTI2MDEzMjIuNTE4ODg3LCJuYmYiOjE2OTI2MDEzMjIuNTE4ODg5LCJleHAiOjE3MjQyMjM3MjIuNTExNzE1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.MzavLHsGG7_bqHHJCq_CaaeLv1SQU-YHWRH-9iak_0XolFSx2H3JDI3uCWs6AIEbOlMzkDPxIi8u4pD3_TO_PeeJhBsIwLUwhfEW3ks46AFALmMoIEvmbGjseawZuohYspanJnAKSCikGMCm-FrjDoKdcLP2cV7cfXzpGcNwSwZsNM9upijrJJ2_rG6XDl0CFRbevaEcWmN0CzzyaFJLFeVCfhQQHGDkZk3kdYP40IPvNGJXDeTaA8v0DGAVwji66aB0PJlgK61CrDq9MWKbbdG2lGbT0hUW8btq8pQNSmlXylzC5X__fv_NAACoLw9ba1C54tgAkz4oPAXxmKUBM405x2WCCXZqJgJcOzNcK8VugZrDh6My33sI-q7sWOsRBX5mJVDmGjjk1GAVqrRN9E3uq33bSaYWwxxhEDKdK6OWYyEE4xdIYaaSoInJOPMh4ztZuM5s8EeTppGPozNumEOtj5E0sqMemL0oF6a2f9FlhHnpJjs1ZTp8q_waihVvJwYDgNR78IJ_vyA5DnpGUBGypGWARZMpv6_Kf3Jokpa0kiRqMpxuQaOUvReqZBur4AU9vHpnJLO5GqXOvCPnRUxvepZSB3fCxUzFwqR9K8n84bbPXMoJPic8zY4LuMSMxp8_ynbfswyGVFoS5G8iTc0VRW11Jrr8ojewkiCwkx4
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZTJmOTMyYTllMDE4ZjViNGU3YWRkMTEwOTYwNDJlNGI5NzdkNmJhZTk4MmUxMjlhZDk4YjE4MTJjZDQ3Nzg1M2E2NWIxYmQ5ZjU0MGE4NjYiLCJpYXQiOjE2OTI2ODQyNTguODA2NDk4LCJuYmYiOjE2OTI2ODQyNTguODA2NSwiZXhwIjoxNzI0MzA2NjU4Ljc5NjU4OSwic3ViIjoiMSIsInNjb3BlcyI6W119.K__oj7JOUiRk8HXutHlOoiISq0bc8EB62-RV5vwtRMh0hjTb8sIjsa8_uUV3-H1cwn7oZx5I2GFpGEDN0cHHP3NDbfkJJKjTnYMpke442dCCYqNOhk4UDF9Cclsk5Y_tuUg5-OPZZjf9OHc-F7yWwGD2-SKp3mvjK6KOzLR7kKA-gumukErD1EQWv4EAlhE9cd9REsiKx4aAh_abIYCVxP5H2zBKq4qUn4aCkYQKMGimhz6tpUY7rgHT7rPDg1F8KBgtr2wDmNSwT33eTWvrcE2m_SBpCR3gz8YUNF870uEmfLhibdBZI2ZnMEBKaSiP94BxiMY95q-o0cYzZdCS5PoSWq9QFxxkvg7ZGWA5_ZVZvATtUuRTa3Nuf3qJWYb4l44Kt6iOuUblk8ROX9HamiqhI_9F7CQwyItGv6XpQSOcnr5hJo2IcICJnVt07crOmzEWDhNaHpN4ko9KI3k_jhZYOIA494mtbfWqznL3WG2ZoaNCrYaR5xr81unCvetMr1UMPCMeHZN-DSJLfPFpeNDjw6xP3N3CRjiYC0kUYi73vbse8VN2YSZD1huwCYgPNuzEqvOwLPUaW1lWSFbyJ29XIvX1JlJYo3ftCJLMDCBplwsOzNkbWSxT08aOFJSb_aYkbz11ee_8wOZQLpXCR0r-RSLwNFRam0QboC1IxZg
 GET {{host}}/auth/user HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -37,8 +37,8 @@ Authorization: Bearer {{token}}
 
 {
 
-  "username": "moon1",
-  "email": "moon1@gmail.com",
+  "username": "karima",
+  "email": "karima2@gmail.com",
   "password": "123456"
 
 }
@@ -66,8 +66,10 @@ app-role: owner
     "email": "nijehar504@cwtaa.com",
     # "employee_id": 10,
     "is_pdf" : 1,
-     "fromdate":"2023-08-20"
-    # "todate": "2023-08-16"
+    #  "fromdate":"2023-08-20",
+    # "todate": "2023-08-16",
+     "sort_direction" : "asc",
+     "sort_by":
 
 }
 
