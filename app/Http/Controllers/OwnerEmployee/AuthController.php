@@ -8,14 +8,13 @@ use App\Services\Interface\AuthInterface;
 use App\Http\Requests\EmployeeAddRequest;
 
 use App\Traits\Base;
-use Exception;
 
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
     use Base;
-    //
+    
     private $authRepository;
 
     public function __construct(AuthInterface $authRepository)

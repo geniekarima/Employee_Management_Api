@@ -21,6 +21,7 @@ class EmployeeProfileRepository implements EmployeeProfileInterface
             if (!isset($user))
                 return Base::fail('User not found!');
             $user->username = isset($request->username) ? $request->username : $user->username;
+            $user->password = isset($request->password) ? $request->password : $user->password;
             $user->phone = isset($request->phone) ? $request->phone : $user->phone;
             $user->address = isset($request->address) ? $request->address : $user->address;
             $user->birth_date = isset($request->birth_date) ? $request->birth_date : $user->birth_date;
@@ -72,6 +73,7 @@ class EmployeeProfileRepository implements EmployeeProfileInterface
                 return Base::fail('User not found!');
             }
             $user->username = isset($request->username) ? $request->username : $user->username;
+            $user->password = isset($request->password) ? $request->password : $user->password;
             $user->designation = isset($request->designation) ? $request->designation : $user->designation;
             $user->phone = isset($request->phone) ? $request->phone : $user->phone;
             $user->address = isset($request->address) ? $request->address : $user->address;
