@@ -58,7 +58,10 @@ Route::prefix('owner')->group(function () {
 
     Route::prefix('employee-profile')->group(function() {
         //edit employee's profile
+        Route::get('/show', [EmployeeProfileController::class, 'ownerEmployeesProfileShow'])->middleware(['auth:api', 'usertype:owner']);
         Route::post('/edit', [EmployeeProfileController::class, 'ownerEmployeesProfileUpdate'])->middleware(['auth:api', 'usertype:owner']);
+        Route::post('/deactivate', [EmployeeProfileController::class, 'ownerEmployeesProfileDeactivate'])->middleware(['auth:api', 'usertype:owner']);
+        Route::post('/delete', [EmployeeProfileController::class, 'ownerDeleteEmployeesProfile'])->middleware(['auth:api', 'usertype:owner']);
 
       });
 

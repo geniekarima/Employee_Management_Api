@@ -35,7 +35,7 @@ class AuthRepository implements AuthInterface
                 $accessToken = $user->createToken('authToken')->accessToken;
                 $data = [
                     'token' => $accessToken,
-                    'user' => new UserResource(Auth::user()),
+                    'user' => new EmployeeResource(Auth::user()),
                 ];
                 return Base::pass('User login successfully', $data);
             } else {
@@ -68,11 +68,10 @@ class AuthRepository implements AuthInterface
             if (!$user)
                 return Base::fail('User not found!');
 
+            $accessToken = $user->createToken('authToken')->accessToken;
             $data = [
-                'id' => $user->id,
-                'username' => $user->username,
-                'email' => $user->email,
-                'usertype' => $user->usertype,
+                'token' => $accessToken,
+                'user' => new EmployeeResource($user),
             ];
             return Base::success('User Information', $data);
         } catch (Exception $e) {

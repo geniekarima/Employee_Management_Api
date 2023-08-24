@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('address')->nullable();
             $table->string('image')->nullable();
             $table->date('birth_date')->nullable();
+            $table->boolean('is_active')->default(true);
         });
     }
 
