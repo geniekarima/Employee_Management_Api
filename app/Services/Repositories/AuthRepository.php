@@ -5,7 +5,6 @@ namespace App\Services\Repositories;
 use Exception;
 use App\Models\User;
 use App\Traits\Base;
-use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -88,7 +87,8 @@ class AuthRepository implements AuthInterface
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'usertype' => 'employee'
+                'usertype' => 'employee',
+                'designation' => $request->designation,
             ]);
 
             //  if (!$user->success)  return Base::fail('User not Created!');
@@ -96,6 +96,7 @@ class AuthRepository implements AuthInterface
             $messages = [
                 'username' => $user->username,
                 'password' => "Your password is: " . $request->password,
+                'designation' => "Your designation is: " . $request->designation,
             ];
             $user->notify(new EmployeeAddNotification($messages));
 

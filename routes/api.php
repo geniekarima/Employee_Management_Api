@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Employee\EmployeeProfileController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Owner\AuthController;
-use App\Http\Controllers\Owner\OwnerEmployeeController;
+use App\Http\Controllers\OwnerEmployee\AuthController;
+use App\Http\Controllers\OwnerEmployee\OwnerEmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +34,6 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('employee')->group(function () {
-    //employeeList
-    Route::get('/list', [OwnerEmployeeController::class, 'employeeList'])->middleware(['auth:api', 'usertype:owner']);
     //checkin
     Route::post('/checkin', [OwnerEmployeeController::class, 'checkIn'])->middleware(['auth:api', 'usertype:employee']);
     //start-break
@@ -43,9 +42,29 @@ Route::prefix('employee')->group(function () {
     Route::post('/end-break', [OwnerEmployeeController::class, 'endBreak'])->middleware(['auth:api', 'usertype:employee']);
     //checkout
     Route::post('/checkout', [OwnerEmployeeController::class, 'checkOut'])->middleware(['auth:api', 'usertype:employee']);
+
+    Route::prefix('profile')->group(function() {
+        //update employee profile
+        Route::post('/update', [EmployeeProfileController::class, 'updateEmployeeProfile'])->middleware(['auth:api', 'usertype:employee']);
+
+      });
+});
+
+Route::prefix('owner')->group(function () {
+    //employeeList
+    Route::get('/list', [OwnerEmployeeController::class, 'employeeList'])->middleware(['auth:api', 'usertype:owner']);
     //report-list all employee
     Route::get('/report', [OwnerEmployeeController::class, 'employeeReportList'])->middleware(['auth:api', 'usertype:owner']);
+
+    Route::prefix('employee-profile')->group(function() {
+        //edit employee's profile
+        Route::post('/edit', [EmployeeProfileController::class, 'ownerEmployeesProfileUpdate'])->middleware(['auth:api', 'usertype:owner']);
+
+      });
+
 });
+
+
 
 // Route::middleware('owner')->group(function () {
 

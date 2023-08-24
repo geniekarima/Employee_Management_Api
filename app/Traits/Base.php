@@ -172,41 +172,41 @@ trait Base
     //     );
     // }
 
-    // public static function imageUpload($image, $model)
-    // {
-    //     $uuid = (string) Str::uuid();
-    //     $image = $image; // image base64 encoded
-    //     preg_match(
-    //         "/data:image\/(.*?);/",
-    //         $image,
-    //         $image_extension
-    //     ); // extract the image extension
-    //     $image = preg_replace(
-    //         '/data:image\/(.*?);base64,/',
-    //         '',
-    //         $image
-    //     ); // remove the type part
-    //     $image = str_replace(' ', '+', $image);
-    //     $imageName = $model . '_' . time() . '_' . $uuid . '.' . $image_extension[1]; //generating unique file name;
-    //     $file = base64_decode($image);
+    public static function imageUpload($image, $model)
+    {
+        $uuid = (string) Str::uuid();
+        $image = $image; // image base64 encoded
+        preg_match(
+            "/data:image\/(.*?);/",
+            $image,
+            $image_extension
+        ); // extract the image extension
+        $image = preg_replace(
+            '/data:image\/(.*?);base64,/',
+            '',
+            $image
+        ); // remove the type part
+        $image = str_replace(' ', '+', $image);
+        $imageName = $model . '_' . time() . '_' . $uuid . '.' . $image_extension[1]; //generating unique file name;
+        $file = base64_decode($image);
 
-    //     $imageFile = Image::make($file);
+        $imageFile = Image::make($file);
 
-    //     $imageFile->resize(512, 512, function ($constraint) {
-    //         $constraint->aspectRatio();
-    //     });
+        $imageFile->resize(512, 512, function ($constraint) {
+            $constraint->aspectRatio();
+        });
 
-    //     // $imageFile->save('/images/' . $model . '/' . $imageName);
+        // $imageFile->save('/images/' . $model . '/' . $imageName);
 
-    //     $newPath = public_path() . '/images/' . $model;
-    //     if (!file_exists($newPath)) {
-    //         mkdir($newPath, 0755, true);
-    //     }
+        $newPath = public_path() . '/images/' . $model;
+        if (!file_exists($newPath)) {
+            mkdir($newPath, 0755, true);
+        }
 
-    //     $imageFile->save(public_path() . '/images/' . $model . '/' . $imageName);
+        $imageFile->save(public_path() . '/images/' . $model . '/' . $imageName);
 
-    //     return 'images/' . $model . '/' . $imageName;
-    // }
+        return 'images/' . $model . '/' . $imageName;
+    }
     // public static function imageUploadWeb($image, $model, $user_image = null)
     // {
     //     // $imageFile->save('/images/' . $model . '/' . $imageName);

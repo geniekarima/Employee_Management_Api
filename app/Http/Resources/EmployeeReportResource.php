@@ -19,7 +19,6 @@ class EmployeeReportResource extends JsonResource
             'date' => $this->date,
             'check_in' => $this->check_in,
             'check_out' => $this->check_out,
-            'office_hours' => $this->office_hours,
         ];
     }
 }
