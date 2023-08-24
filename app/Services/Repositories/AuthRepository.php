@@ -5,7 +5,6 @@ namespace App\Services\Repositories;
 use Exception;
 use App\Models\User;
 use App\Traits\Base;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Interface\AuthInterface;
@@ -90,7 +89,6 @@ class AuthRepository implements AuthInterface
                 'designation' => $request->designation,
             ]);
 
-            //  if (!$user->success)  return Base::fail('User not Created!');
 
             $messages = [
                 'username' => $user->username,
