@@ -5,7 +5,6 @@ namespace App\Services\Repositories;
 use Exception;
 use App\Models\User;
 use App\Traits\Base;
-use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +35,7 @@ class AuthRepository implements AuthInterface
                 $accessToken = $user->createToken('authToken')->accessToken;
                 $data = [
                     'token' => $accessToken,
-                    'user' => new UserResource(Auth::user()),
+                    'user' => new EmployeeResource(Auth::user()),
                 ];
                 return Base::pass('User login successfully', $data);
             } else {
@@ -69,11 +68,10 @@ class AuthRepository implements AuthInterface
             if (!$user)
                 return Base::fail('User not found!');
 
+            $accessToken = $user->createToken('authToken')->accessToken;
             $data = [
-                'id' => $user->id,
-                'username' => $user->username,
-                'email' => $user->email,
-                'usertype' => $user->usertype,
+                'token' => $accessToken,
+                'user' => new EmployeeResource($user),
             ];
             return Base::success('User Information', $data);
         } catch (Exception $e) {
@@ -88,7 +86,8 @@ class AuthRepository implements AuthInterface
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'usertype' => 'employee'
+                'usertype' => 'employee',
+                'designation' => $request->designation,
             ]);
 
             //  if (!$user->success)  return Base::fail('User not Created!');
@@ -96,6 +95,7 @@ class AuthRepository implements AuthInterface
             $messages = [
                 'username' => $user->username,
                 'password' => "Your password is: " . $request->password,
+                'designation' => "Your designation is: " . $request->designation,
             ];
             $user->notify(new EmployeeAddNotification($messages));
 

@@ -1,6 +1,7 @@
 @host = http://127.0.0.1:8000/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZTJmOTMyYTllMDE4ZjViNGU3YWRkMTEwOTYwNDJlNGI5NzdkNmJhZTk4MmUxMjlhZDk4YjE4MTJjZDQ3Nzg1M2E2NWIxYmQ5ZjU0MGE4NjYiLCJpYXQiOjE2OTI2ODQyNTguODA2NDk4LCJuYmYiOjE2OTI2ODQyNTguODA2NSwiZXhwIjoxNzI0MzA2NjU4Ljc5NjU4OSwic3ViIjoiMSIsInNjb3BlcyI6W119.K__oj7JOUiRk8HXutHlOoiISq0bc8EB62-RV5vwtRMh0hjTb8sIjsa8_uUV3-H1cwn7oZx5I2GFpGEDN0cHHP3NDbfkJJKjTnYMpke442dCCYqNOhk4UDF9Cclsk5Y_tuUg5-OPZZjf9OHc-F7yWwGD2-SKp3mvjK6KOzLR7kKA-gumukErD1EQWv4EAlhE9cd9REsiKx4aAh_abIYCVxP5H2zBKq4qUn4aCkYQKMGimhz6tpUY7rgHT7rPDg1F8KBgtr2wDmNSwT33eTWvrcE2m_SBpCR3gz8YUNF870uEmfLhibdBZI2ZnMEBKaSiP94BxiMY95q-o0cYzZdCS5PoSWq9QFxxkvg7ZGWA5_ZVZvATtUuRTa3Nuf3qJWYb4l44Kt6iOuUblk8ROX9HamiqhI_9F7CQwyItGv6XpQSOcnr5hJo2IcICJnVt07crOmzEWDhNaHpN4ko9KI3k_jhZYOIA494mtbfWqznL3WG2ZoaNCrYaR5xr81unCvetMr1UMPCMeHZN-DSJLfPFpeNDjw6xP3N3CRjiYC0kUYi73vbse8VN2YSZD1huwCYgPNuzEqvOwLPUaW1lWSFbyJ29XIvX1JlJYo3ftCJLMDCBplwsOzNkbWSxT08aOFJSb_aYkbz11ee_8wOZQLpXCR0r-RSLwNFRam0QboC1IxZg
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZTc1NTIxYmNkMDdiMWM0MzQyNmZlNGQ3ZDgxZWVjNzQzNDA1ZjY2MGExZDYzM2FkYmE5MmY3NWQ5NGI4ZGNkNjUyZjEyMGNlOTc0MGY5NmUiLCJpYXQiOjE2OTI3ODcyMTAuMDgyNTk3LCJuYmYiOjE2OTI3ODcyMTAuMDgyNTk5LCJleHAiOjE3MjQ0MDk2MTAuMDc0Nzg0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Vu9t7SmQWj7H_F8CAkUwIvvt3pYRPbDmexUS0H1vitytakiJKiO0fVZQILdXiSWO5GkyKEV2vkLwNXhtyV_Grg0CkVoYINNzZRLlgxskOzqZhCumZHCnbecQ7L3ltaLJIoAkmVWJ2VzeO3lzfIsXTsGs_KDURul2tvu0ot1-uium_LyMVupbTX5BPMqHsFaL3ibqmnKv-ve7t2I2KOXrNXfrqWvzjmpwMoDwonXqTArdZaKjrrMBNhpgvw0A5huJ3EsMLdncuGIMC0P2_gUE3VMBTZe642a6m3D78lGva8jrrAV5PDgOOIuIAX8sr9vZYT9rgQn8tZzXsaLhuv9Z-15FZreWKUpPAVBwDqFP6K9vs0cL12GeKIYhV0jjSYujJmY4TIs1puZJZn1IDnvJzooJdVM-qNXBybQgPQczTQK6c5di6sbfwy81kJO0hrHGzRcQYPaW_LwLCI4ISjaZjb7Vf0kCm_GXbSAx0tFFotXIfYQ1k8Ne8GRHszDmKH2uTWEe3FhPDBGRetLmZtCCo9-OTQTkASF6BETwYLYlO6ig4i5QgF0M2pmUQ5jWX0wD7Sw4ZF1jgvVgokFLfepfdrix3lh0w8-TROWgjmFej6W4OiOKnp5YDowYs1wJgdHOvKnIZW5deKiq0Q9s5bZtD9-71eQ60UKS9NyIhEX1GQ4
+
 GET {{host}}/auth/user HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -37,41 +38,10 @@ Authorization: Bearer {{token}}
 
 {
 
-  "username": "karima",
-  "email": "karima2@gmail.com",
-  "password": "123456"
+  "username": "Jeri",
+  "email": "jeri1@gmail.com",
+  "password": "123456",
+  "designation": "developer"
 
 }
-
-################
-## Employee List
-GET {{host}}/employee/list HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
-app-role: owner
-
-{
-
-
-}
-
-################
-## Employee Report List
-GET {{host}}/employee/report HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
-app-role: owner
-
-{
-    "email": "nijehar504@cwtaa.com",
-    # "employee_id": 10,
-    "is_pdf" : 1,
-    #  "fromdate":"2023-08-20",
-    # "todate": "2023-08-16",
-     "sort_direction" : "asc",
-     "sort_by":
-
-}
-
-
 
