@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 interface OwnerEmployeeInterface
 {
-    public function employeeList();
+    public function employeeList(Request $request);
     public function employeeReportList(Request $request);
     public function checkIn(Request $request);
     public function startBreak(Request $request);

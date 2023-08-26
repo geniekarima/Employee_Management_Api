@@ -24,13 +24,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     //get user
-    Route::get('user',[AuthController::class, 'getUser'])->middleware('auth:api');
+    Route::get('user', [AuthController::class, 'getUser'])->middleware('auth:api');
     // Login
     Route::post('/login', [AuthController::class, 'login']);
     //logout
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
     //add-employee
     Route::post('/add-employee', [AuthController::class, 'addEmployee'])->middleware(['auth:api', 'usertype:owner']);
+    //forget password
+    Route::post('forget-password', [AuthController::class, 'resendOtp']);
+    Route::post('/verify-forget-password', [AuthController::class, 'verifyOtp']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 });
 
 Route::prefix('employee')->group(function () {
@@ -43,11 +47,11 @@ Route::prefix('employee')->group(function () {
     //checkout
     Route::post('/checkout', [OwnerEmployeeController::class, 'checkOut'])->middleware(['auth:api', 'usertype:employee']);
 
-    Route::prefix('profile')->group(function() {
+    Route::prefix('profile')->group(function () {
         //update employee profile
         Route::post('/update', [EmployeeProfileController::class, 'updateEmployeeProfile'])->middleware(['auth:api', 'usertype:employee']);
 
-      });
+    });
 });
 
 Route::prefix('owner')->group(function () {
@@ -56,14 +60,14 @@ Route::prefix('owner')->group(function () {
     //report-list all employee
     Route::get('/report', [OwnerEmployeeController::class, 'employeeReportList'])->middleware(['auth:api', 'usertype:owner']);
 
-    Route::prefix('employee-profile')->group(function() {
+    Route::prefix('employee-profile')->group(function () {
         //edit employee's profile
         Route::get('/show', [EmployeeProfileController::class, 'ownerEmployeesProfileShow'])->middleware(['auth:api', 'usertype:owner']);
         Route::post('/edit', [EmployeeProfileController::class, 'ownerEmployeesProfileUpdate'])->middleware(['auth:api', 'usertype:owner']);
         Route::post('/deactivate', [EmployeeProfileController::class, 'ownerEmployeesProfileDeactivate'])->middleware(['auth:api', 'usertype:owner']);
         Route::post('/delete', [EmployeeProfileController::class, 'ownerDeleteEmployeesProfile'])->middleware(['auth:api', 'usertype:owner']);
 
-      });
+    });
 
 });
 

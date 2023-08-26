@@ -17,10 +17,10 @@ class OwnerEmployeeController extends Controller
         $this->ownerEmployeeRepository = $ownerEmployeeRepository;
     }
 
-    public function employeeList()
+    public function employeeList(Request $request)
     {
         try {
-            $data = $this->ownerEmployeeRepository->employeeList();
+            $data = $this->ownerEmployeeRepository->employeeList($request, request()->header('app_role'));
             return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
         } catch (Exception $e) {
             return Base::exception_fail($e);

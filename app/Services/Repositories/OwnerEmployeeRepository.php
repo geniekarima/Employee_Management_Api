@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\Interface\OwnerEmployeeInterface;
+use App\Http\Resources\EmployeeReportResource;
+use App\Http\Resources\EmployeeResource;
 use App\Models\EmployeeBreak;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendpdfNotification;
@@ -21,19 +23,36 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 {
     use Base;
 
-    public function employeeList()
-    {
-        try {
-            $data = User::where('usertype', 'employee')
-                ->orderBy('created_at', 'desc')
-                ->get();
+    // public function employeeList()
+    // {
+    //     try {
+    //         $data = User::where('usertype', 'employee')
+    //             ->orderBy('created_at', 'desc')
+    //             ->get();
 
-            return Base::pass('All Employees List', $data);
+    //         return Base::pass('All Employees List', $data);
 
-        } catch (Exception $e) {
-            return Base::exception_fail($e);
-        }
+    //     } catch (Exception $e) {
+    //         return Base::exception_fail($e);
+    //     }
+    // }
+    public function employeeList($request)
+{
+    try {
+        $take = isset($request['take']) ? $request['take'] : 10;
+        $employees = User::where('usertype', 'employee')
+            ->orderBy('created_at', 'desc')
+            ->paginate($take);
+
+            $data = EmployeeResource::collection($employees)->response()->getData(true);
+
+        return Base::pass('All Employees List', $data);
+
+    } catch (Exception $e) {
+        return Base::exception_fail($e);
     }
+}
+
 
     public function checkIn(Request $request)
     {
@@ -156,6 +175,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
     public function employeeReportList(Request $request)
     {
         try {
+            $take = isset($request['take']) ? $request['take'] : 10;
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
@@ -179,7 +199,8 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                     return $q->join('users', 'employee_reports.employee_id', '=', 'users.id')
                         ->orderBy('users.username', $sortDirection);
                 })
-                ->get();
+                // ->get();
+                ->paginate($take);
 
             if ($reports->isEmpty()) {
                 return Base::fail('No reports found for this date');
@@ -211,8 +232,12 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 
                 $allData['pdf_url'] = $pdfUrl;
             }
-            $allData['reports'] = $reports;
-            return Base::pass('Employee Report List and PDF available for download', $allData);
+            // Transform the report data using the resource
+                $reportResource = EmployeeReportResource::collection($reports)->response()->getData(true);
+                // $allData['reports'] = $reportResource;
+
+                        // $allData['reports'] = $reports;
+            return Base::pass('Employee Report List and PDF available for download', $reportResource);
 
         } catch (Exception $e) {
             return Base::exception_fail($e);
