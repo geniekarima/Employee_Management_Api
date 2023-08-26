@@ -16,7 +16,13 @@ return new class extends Migration {
             $table->string('address')->nullable();
             $table->string('image')->nullable();
             $table->date('birth_date')->nullable();
+
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_verified')->default(false);
+
+            $table->string('otp')->nullable();
+            $table->dateTime('otp_created_at')->nullable();
+            $table->softDeletes();
         });
     }
 
