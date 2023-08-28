@@ -69,7 +69,7 @@ Content-Type: application/json
 {
  "email": "xaxab38773@trazeco.com",
  "otp": "325733",
-  "forget": true
+ "forget": true
 }
 
 ################
