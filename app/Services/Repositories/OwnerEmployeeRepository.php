@@ -23,35 +23,22 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 {
     use Base;
 
-    // public function employeeList()
-    // {
-    //     try {
-    //         $data = User::where('usertype', 'employee')
-    //             ->orderBy('created_at', 'desc')
-    //             ->get();
-
-    //         return Base::pass('All Employees List', $data);
-
-    //     } catch (Exception $e) {
-    //         return Base::exception_fail($e);
-    //     }
-    // }
     public function employeeList($request)
-{
-    try {
-        $take = isset($request['take']) ? $request['take'] : 10;
-        $employees = User::where('usertype', 'employee')
-            ->orderBy('created_at', 'desc')
-            ->paginate($take);
+    {
+        try {
+            $take = isset($request['take']) ? $request['take'] : 10;
+            $employees = User::where('usertype', 'employee')
+                ->orderBy('created_at', 'desc')
+                ->paginate($take);
 
             $data = EmployeeResource::collection($employees)->response()->getData(true);
 
-        return Base::pass('All Employees List', $data);
+            return Base::pass('All Employees List', $data);
 
-    } catch (Exception $e) {
-        return Base::exception_fail($e);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
     }
-}
 
 
     public function checkIn(Request $request)
@@ -175,12 +162,12 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
     public function employeeReportList(Request $request)
     {
         try {
-            $take = isset($request['take']) ? $request['take'] : 10;
+            $take = isset($request['take']) ? $request['take'] : 20;
             $fromDate = $request->input('fromdate');
             $toDate = $request->input('todate');
 
             $sortDirection = $request->input('sort_direction', 'desc');
-             $sortBy = $request->input('sort_by', 'date');
+            $sortBy = $request->input('sort_by', 'date');
 
             $reports = EmployeeReport::with('user', 'breakTasks')
                 ->when(isset($request->fromdate), function ($q) use ($request) {
@@ -199,11 +186,10 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                     return $q->join('users', 'employee_reports.employee_id', '=', 'users.id')
                         ->orderBy('users.username', $sortDirection);
                 })
-                // ->get();
                 ->paginate($take);
 
             if ($reports->isEmpty()) {
-                return Base::fail('No reports found for this date');
+                return Base::fail('No reports found.');
             }
 
             $username = "";
@@ -231,13 +217,13 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 Notification::route('mail', $email)->notify(new SendpdfNotification($pdfPath));
 
                 $allData['pdf_url'] = $pdfUrl;
-            }
-            // Transform the report data using the resource
-                $reportResource = EmployeeReportResource::collection($reports)->response()->getData(true);
-                // $allData['reports'] = $reportResource;
 
-                        // $allData['reports'] = $reports;
-            return Base::pass('Employee Report List and PDF available for download', $reportResource);
+            }
+            $reportResource = EmployeeReportResource::collection($reports)->response()->getData(true);
+            // $allData['reportResource'] = $reports;
+            $allData['reportResource'] = $reportResource;
+
+            return Base::pass('Employee Report List and PDF available for download', $allData);
 
         } catch (Exception $e) {
             return Base::exception_fail($e);

@@ -24,7 +24,8 @@ class EmployeeResource extends JsonResource
             'address' => $this->address,
             'image' => $this->image,
             'birth_date' => $this->birth_date,
-            'is_active' => $this->is_active,
+            // "is_verified" => $this->is_verified ? 1 : 0,
+            "is_active" => $this->is_active ? 1 : 0,
         ];
     }
 }
