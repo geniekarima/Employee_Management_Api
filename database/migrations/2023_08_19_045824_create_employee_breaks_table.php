@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employee_breaks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_report_id');
+            $table->foreignId('employee_report_id')->references('id')->on('employee_reports')->onDelete('cascade');
             $table->dateTime('break_start');
             $table->dateTime('break_end')->nullable();
             $table->timestamps();
