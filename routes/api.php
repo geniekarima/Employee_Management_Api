@@ -52,6 +52,11 @@ Route::prefix('employee')->group(function () {
         Route::post('/update', [EmployeeProfileController::class, 'updateEmployeeProfile'])->middleware(['auth:api', 'usertype:employee']);
 
     });
+    Route::prefix('task')->group(function () {
+        //added task
+        Route::post('/add', [OwnerEmployeeController::class, 'addTask'])->middleware(['auth:api', 'usertype:employee']);
+
+    });
 });
 
 Route::prefix('owner')->group(function () {
@@ -59,6 +64,8 @@ Route::prefix('owner')->group(function () {
     Route::get('/list', [OwnerEmployeeController::class, 'employeeList'])->middleware(['auth:api', 'usertype:owner']);
     //report-list all employee
     Route::get('/report', [OwnerEmployeeController::class, 'employeeReportList'])->middleware(['auth:api', 'usertype:owner']);
+    //add project
+    Route::post('/project-add', [OwnerEmployeeController::class, 'addProject'])->middleware(['auth:api', 'usertype:owner']);
 
     Route::prefix('employee-profile')->group(function () {
         //edit employee's profile

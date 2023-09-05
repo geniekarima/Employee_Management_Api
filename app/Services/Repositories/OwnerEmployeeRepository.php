@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\Interface\OwnerEmployeeInterface;
+use App\Http\Resources\TaskResource;
+use App\Models\Project;
+use App\Models\Task;
+use App\Http\Requests\TaskRequest;
 use App\Http\Resources\EmployeeReportResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\EmployeeBreak;
@@ -225,6 +229,46 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 
             return Base::pass('Employee Report List and PDF available for download', $allData);
 
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function addTask(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $task = Task::create([
+                'title' => $request->title,
+                'project_id' => $request->project_id,
+                'description' => $request->description,
+                'dependency' => $request->dependency,
+                'delay_reason' => $request->delay_reason,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+            ]);
+
+            $task = new TaskResource($task);
+            return Base::pass('Task created successfully', $task);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function addProject(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $data = Project::create([
+                'name' => $request->name,
+            ]);
+            return Base::pass('Project created successfully', $data);
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
