@@ -12,4 +12,6 @@ interface OwnerEmployeeInterface
     public function startBreak(Request $request);
     public function endBreak(Request $request);
     public function checkOut(Request $request);
+    public function addTask(Request $request);
+    public function addProject(Request $request);
 }

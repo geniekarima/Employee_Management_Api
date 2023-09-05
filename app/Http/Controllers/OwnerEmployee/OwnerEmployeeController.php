@@ -4,6 +4,7 @@ namespace App\Http\Controllers\OwnerEmployee;
 
 use App\Http\Controllers\Controller;
 use App\Services\Interface\OwnerEmployeeInterface;
+use App\Http\Requests\TaskRequest;
 use Illuminate\Http\Request;
 use App\Traits\Base;
 use Exception;
@@ -76,5 +77,26 @@ class OwnerEmployeeController extends Controller
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
+    }
+    public function addTask(TaskRequest $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->addTask($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+
+    public function addProject(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->addProject($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
     }
 }
