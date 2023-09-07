@@ -76,6 +76,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $checkIn->save();
             return Base::pass('Check In Successfully', $checkIn);
 
+
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -273,4 +274,50 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+    public function updateProject($request)
+    {
+        try {
+            $authenticatedUser = Auth::user();
+
+            if (!$authenticatedUser)
+                return Base::fail('You are not logged in');
+
+            $project = Project::find($request->id);
+
+            if (!isset($project)) {
+                return Base::fail('Project not found!');
+            }
+            $project->name = isset($request->name) ? $request->name : $project->name;
+            $project->status = isset($request->status) ? $request->status : $project->status;
+            $project->save();
+
+            return Base::pass('Project name Updated!', $project);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function deleteProject($request)
+    {
+        try {
+            $project = Project::find($request->id);
+            if (!isset($project))
+                return Base::fail('Project not found');
+            $project->delete();
+
+            return Base::pass('Project Deleted Successfully');
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectList($request)
+    {
+        try {
+            $data = Project::all();
+            return Base::pass('All Project List', $data);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
 }
+

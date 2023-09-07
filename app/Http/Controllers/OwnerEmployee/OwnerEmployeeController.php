@@ -99,4 +99,32 @@ class OwnerEmployeeController extends Controller
         }
 
     }
+    public function projectList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function updateProject(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->updateProject($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function deleteProject(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->deleteProject($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
 }
