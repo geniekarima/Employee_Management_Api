@@ -233,6 +233,26 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+    public function authProjectList(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $assignedProjects = ProjectAssign::where('employee_id', $user->id)
+            ->with('project')
+            ->get();
+
+        $projects = $assignedProjects->pluck('project');
+
+
+            return Base::pass('All assigned project list', $projects);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
     public function addTask(Request $request)
     {
         try {
@@ -240,6 +260,14 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 
             if (!$user)
                 return Base::fail('You are not logged in');
+                
+            $projectAssignment = ProjectAssign::where('employee_id', $user->id)
+            ->where('project_id', $request->project_id)
+            ->first();
+
+        if (!$projectAssignment) {
+            return Base::fail('You are not assigned to this project');
+        }
 
             $task = Task::create([
                 'title' => $request->title,
@@ -364,7 +392,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
 
             $assignments = ProjectAssign::with(['user', 'project'])
                 ->orderBy('created_at', 'desc')
-                ->count();
+                ->get();
 
             return Base::pass('Project assignments retrieved successfully', $assignments);
         } catch (Exception $e) {

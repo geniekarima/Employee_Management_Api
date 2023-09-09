@@ -14,6 +14,7 @@ interface OwnerEmployeeInterface
     public function checkOut(Request $request);
     public function addTask(Request $request);
     public function addProject(Request $request);
+    public function authProjectList(Request $request);
     public function deleteProject(Request $request);
     public function updateProject(Request $request);
     public function projectList(Request $request);

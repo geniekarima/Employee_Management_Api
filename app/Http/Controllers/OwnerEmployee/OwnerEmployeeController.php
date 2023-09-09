@@ -88,7 +88,16 @@ class OwnerEmployeeController extends Controller
         }
 
     }
+    public function authProjectList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authProjectList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
 
+    }
     public function addProject(Request $request)
     {
         try {

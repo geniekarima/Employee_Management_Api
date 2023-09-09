@@ -1,7 +1,7 @@
 @host = http://127.0.0.1:8000/api
 # @host =https://ems.ctgsociety.org/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMjI4ZWFjNjA2YzU0ZDgwYmM1NDE1MDUwNDNiMmQ1ODYyZWU2MDg2MDM1M2Y1ODJkMzczOThmNzhkYTQ5YzdkYTVjOGUwMDQzZTE2YjkzMTAiLCJpYXQiOjE2OTQwNjU2NTEuMDY0OTU4LCJuYmYiOjE2OTQwNjU2NTEuMDY0OTYxLCJleHAiOjE3MjU2ODgwNTEuMDU3MzExLCJzdWIiOiIxMyIsInNjb3BlcyI6W119.t_WU1sWQarbyy9uLa4hLi48yuBtNKGS1bnulk_s63f3nmDMe17jnbhlRrL3pNwe0EFWFAqn5iHiCBsZxtyB0pO1kZ5TthcxpecRz9ruDCQfECqczHFM2ktx0Tl7PpmZO7nm6V0DDxVEdIiB5zXdkxKNXsKzlsVot8dOshm-bRUyPoGhbMVSk3RJmf17x9UqR0k_SbW_rRuJ42zbB0POgcEZ3qYnpyR0HAGGeSjoQyhRpsMZ1phk9U4IIpc4z_X9cX2SduBcU2lNGcrMunILBXDc1a1ZN7_21G7G9qdg5yFOyBx1Bye2dHgAEK4VwQ60JAkCdnZjcG6HLAWFOVmbAHFznL9PxUWsspjdL-SIfEjDFrgrI-G7lDzgbWciLXxiYCp8bbhiSbMQBVRSOSKgeIu8u3O9ZuJA7--3AlQI4rlMF_yUWx5gTvmT-hTVuv-b9Yb9JX8ONMyLorqrUm5fALl6CwviC-Qe8BYdFAwc0gH-sRaRl239QZM8ZHIj5WarmJXiJqx7maoW5pNDeyX8UGYZdBYO8EVGBWjGXJO0xAChjoay3BTgxYT2LCigXN0YSN0zUzZDRMy2mdpqjXGE6iQPvie3Lo6A8Q2hUOVGvnLGaWgIzqhKa4vZD-Obap5MdouYU5yNcMXXDyJbuw9c4IGY6MKp2ihs_nnd4RjG6wTc
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMjgxMWZmZWViYTM1NzI2MDEzMWFlOTRmYjgzMGVjOWJlYzhhZTM4NTE4ZjljYTgwODNjZGY2ZGZiOWEyOGU0ZDRjMjZjNGY4MTcwM2E2MjQiLCJpYXQiOjE2OTQyODIwNTIuNjkxNTk3LCJuYmYiOjE2OTQyODIwNTIuNjkxNjAxLCJleHAiOjE3MjU5MDQ0NTIuNjc1MjUxLCJzdWIiOiIxMyIsInNjb3BlcyI6W119.ZeccsPdVqTXYqG3GzKlbYVDNGrGO-Rrnv1lSSqE2S-zl1i9glINbhQRqTAJjqI9pz4k9nmQHXVTv8lzB1oTpd0FhbjNs4idWKBx5IjWWc7raWDdFOzUOgA0uqkQQTpSua3WZN1RqH4opMi22hEt-q1S7-KBDqEwYTOUP0Epj3EdCyu9DvYbp_TKMpds_tTXOQnWuhbCsa7riqNVPO3bzdLJrxeALyaplrMA_ldpV-OwPvoqeBXFp-Yk_12SV5qE3dFunbACYazc3CHjuVh5tai6CC2WEVXM2t3IbJiPsifFXi8XlA8Hgkq9_-iDN51SMfY6HxGp-YMdhe2zBSBPexzoJsr7d_3R4OPAoD_BNVZaQSBD_Pv0m8LJ9qyGkUPz7kDZnT93keNczeWxhCX_RQB96Dx-Fjgq4YkX4KMSoOnzw6GS0cHcvSMzTzMDjdAkISg7RbGhVb6fs0iNO21MFtPT_xA2pZDur7m-V13C6mg690ziHzTDEuuY4hL7zZrPcCMSPF-PW77KltK-ikDzyKSigplY5VlQgsQZ1xtp93gjkVETv7FY5yLOeFOB2UaUnAxCtU5cgySWYURIM1EpXWfVooDj7Ya0Aqh68mXkPhGMWJh3h5EoONmJr0uOdRHaJ2hZwnpiPV73TJATawoVLIbYOGwJCTKrArcD9O61uzy0
 
 ### User Details
 GET {{host}}/auth/user HTTP/1.1
@@ -80,6 +80,17 @@ app-role: employee
 }
 
 ################
+## show auth project list
+GET {{host}}/employee/auth-project-list HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+   
+
+}
+################
 ## Add task
 POST {{host}}/employee/task/add HTTP/1.1
 Content-Type: application/json
@@ -95,6 +106,7 @@ app-role: employee
     "start_date": "2023-09-05",
     "end_date": "2023-09-10"
 }
+
 
 
 

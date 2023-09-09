@@ -57,6 +57,7 @@ Route::prefix('employee')->group(function () {
         Route::post('/add', [OwnerEmployeeController::class, 'addTask'])->middleware(['auth:api', 'usertype:employee']);
 
     });
+    Route::get('/auth-project-list', [OwnerEmployeeController::class, 'authProjectList'])->middleware(['auth:api', 'usertype:employee']);
 });
 
 Route::prefix('owner')->group(function () {
