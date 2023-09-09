@@ -17,4 +17,9 @@ interface OwnerEmployeeInterface
     public function deleteProject(Request $request);
     public function updateProject(Request $request);
     public function projectList(Request $request);
+    public function projectAssignAdd(Request $request);
+    public function projectAssignList(Request $request);
+    public function projectAssignUpdate(Request $request);
+    public function projectAssignDelete(Request $request);
+
 }

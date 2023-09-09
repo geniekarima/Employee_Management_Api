@@ -127,4 +127,43 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
     }
+    //assign project
+    public function projectAssignAdd(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignAdd($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function projectAssignList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function projectAssignUpdate(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignUpdate($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignDelete(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignDelete($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
 }

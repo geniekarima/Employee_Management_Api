@@ -73,6 +73,16 @@ Route::prefix('owner')->group(function () {
     //delete project
     Route::post('/project-delete', [OwnerEmployeeController::class, 'deleteProject'])->middleware(['auth:api', 'usertype:owner']);
 
+     //assign project
+     Route::post('/project-assign-add', [OwnerEmployeeController::class, 'projectAssignAdd'])->middleware(['auth:api', 'usertype:owner']);
+     //assign project list
+     Route::get('/project-assign-list', [OwnerEmployeeController::class, 'projectAssignList'])->middleware(['auth:api', 'usertype:owner']);
+     //update assign project
+     Route::post('/project-assign-update', [OwnerEmployeeController::class, 'projectAssignUpdate'])->middleware(['auth:api', 'usertype:owner']);
+     //delete assign project
+     Route::post('/project-assign-delete', [OwnerEmployeeController::class, 'projectAssignDelete'])->middleware(['auth:api', 'usertype:owner']);
+
+
     Route::prefix('employee-profile')->group(function () {
         //edit employee's profile
         Route::get('/show', [EmployeeProfileController::class, 'ownerEmployeesProfileShow'])->middleware(['auth:api', 'usertype:owner']);

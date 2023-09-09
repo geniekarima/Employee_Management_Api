@@ -19,8 +19,7 @@ use App\Models\EmployeeBreak;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendpdfNotification;
 use App\Models\EmployeeReport;
-
-
+use App\Models\ProjectAssign;
 use Carbon\Carbon;
 
 class OwnerEmployeeRepository implements OwnerEmployeeInterface
@@ -319,5 +318,113 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
-}
+    public function projectAssignAdd(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
 
+            $project = Project::find($request->project_id);
+            if (!$project) {
+                return Base::fail('Project not found');
+            }
+
+            $user = User::find($request->employee_id);
+            if (!$user) {
+                return Base::fail('User not found');
+            }
+
+            $projectassign = ProjectAssign::where('employee_id', $user->id)
+                ->where('project_id', $project->id)
+                ->first();
+
+            if ($projectassign) {
+                return Base::fail('Project already assigned to this user');
+            }
+
+            $newAssignment = new ProjectAssign();
+            $newAssignment->employee_id = $user->id;
+            $newAssignment->project_id = $project->id;
+            $newAssignment->save();
+
+            return Base::pass('Project assigned successfully', $newAssignment);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignList(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+
+            $assignments = ProjectAssign::with(['user', 'project'])
+                ->orderBy('created_at', 'desc')
+                ->count();
+
+            return Base::pass('Project assignments retrieved successfully', $assignments);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignUpdate(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+            $assignment = ProjectAssign::find($request->id);
+
+            if (!$assignment) {
+                return Base::fail('Project assignment not found');
+            }
+
+            $user = User::find($request->employee_id);
+            if (!$user) {
+                return Base::fail('User not found');
+            }
+
+            $project = Project::find($request->project_id);
+            if (!$project) {
+                return Base::fail('Project not found');
+            }
+
+            $assignment->employee_id = $user->id;
+            $assignment->project_id = $project->id;
+            $assignment->save();
+
+            return Base::pass('Project assignment updated successfully', $assignment);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignDelete(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+
+            $assignment = ProjectAssign::find($request->id);
+
+            if (!$assignment) {
+                return Base::fail('Project assignment not found');
+            }
+
+            $assignment->delete();
+
+            return Base::pass('Project assignment deleted successfully');
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+
+
+
+}
