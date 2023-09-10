@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('project_id');
             $table->string('title');
             $table->text('description')->nullable();
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->text('delay_reason')->nullable();
             $table->date('start_date');
             $table->date('end_date');
+            $table->enum('status', ['backlog', 'to_do', 'on_going', 'ready_for_qa', 're-do', 'completed'])->default('to_do');
             $table->timestamps();
             $table->foreign('project_id')
               ->references('id')

@@ -1,7 +1,7 @@
 @host = http://127.0.0.1:8000/api
 # @host =https://ems.ctgsociety.org/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMjgxMWZmZWViYTM1NzI2MDEzMWFlOTRmYjgzMGVjOWJlYzhhZTM4NTE4ZjljYTgwODNjZGY2ZGZiOWEyOGU0ZDRjMjZjNGY4MTcwM2E2MjQiLCJpYXQiOjE2OTQyODIwNTIuNjkxNTk3LCJuYmYiOjE2OTQyODIwNTIuNjkxNjAxLCJleHAiOjE3MjU5MDQ0NTIuNjc1MjUxLCJzdWIiOiIxMyIsInNjb3BlcyI6W119.ZeccsPdVqTXYqG3GzKlbYVDNGrGO-Rrnv1lSSqE2S-zl1i9glINbhQRqTAJjqI9pz4k9nmQHXVTv8lzB1oTpd0FhbjNs4idWKBx5IjWWc7raWDdFOzUOgA0uqkQQTpSua3WZN1RqH4opMi22hEt-q1S7-KBDqEwYTOUP0Epj3EdCyu9DvYbp_TKMpds_tTXOQnWuhbCsa7riqNVPO3bzdLJrxeALyaplrMA_ldpV-OwPvoqeBXFp-Yk_12SV5qE3dFunbACYazc3CHjuVh5tai6CC2WEVXM2t3IbJiPsifFXi8XlA8Hgkq9_-iDN51SMfY6HxGp-YMdhe2zBSBPexzoJsr7d_3R4OPAoD_BNVZaQSBD_Pv0m8LJ9qyGkUPz7kDZnT93keNczeWxhCX_RQB96Dx-Fjgq4YkX4KMSoOnzw6GS0cHcvSMzTzMDjdAkISg7RbGhVb6fs0iNO21MFtPT_xA2pZDur7m-V13C6mg690ziHzTDEuuY4hL7zZrPcCMSPF-PW77KltK-ikDzyKSigplY5VlQgsQZ1xtp93gjkVETv7FY5yLOeFOB2UaUnAxCtU5cgySWYURIM1EpXWfVooDj7Ya0Aqh68mXkPhGMWJh3h5EoONmJr0uOdRHaJ2hZwnpiPV73TJATawoVLIbYOGwJCTKrArcD9O61uzy0
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzJlMWQ2MGJmN2E5MWZkNWM2YjhhOGQzOGUzNTAyZTdiNzRkNmQyMjBiZWRjZTg1MDk1Y2Q4OGZkN2JjMjI5MDMzNDk5NTBmOTQ2ZmUyODQiLCJpYXQiOjE2OTQzNDEyMzIuMTE0NDg1LCJuYmYiOjE2OTQzNDEyMzIuMTE0NDg4LCJleHAiOjE3MjU5NjM2MzIuMTA4NTc4LCJzdWIiOiIxMyIsInNjb3BlcyI6W119.W9qCRrEh0MgCV7vh3DI899mfxv1DVyXJptJMN9U1ztjxBeqKLu_y_2X3isqgjAFr0tbo7luXPEGH4fYDxhJmWnygOS32NCqZ384cw2KLswGpduKFC-MxQv242rLeebxfucLjoF686ZtVImbJEK48z-GO4Jdlg4CQmdoWIQh4ESK5TRwD58HYQsaoECXpwv8iLn_fkDgOy48ih858d4UnV7UWXPhQg8NEJbzS478Z8m0KL-V9Rd5mgghcAm-JgNETjnG-TgC8Gn21NtOQujr5LaZ3N_acbAs-mfQE0KZGZMWEhghBvt9kfH7l-kMOP3Zoo2NIcq2a-Bo75PJfFxL3-lt6VgRTxnsLGV4tLDhPl0JzK1YkE1jM-q7VeifnyY3sLaV_VaxhiMp5kAXumvrY4eL3eU4GjjfyMfGh20lPCv6tSIadZDDcQVXt3jHzKiCojLaYQhNb9wINHwKSVuX9Ox3pX68X4EaRPUfUzdjuyZHKYqOENwh_EONMUhzQjdUbDTzfyUG_QqPvzOGoM84IgwlA8WvUohMT1DrFhsXH4QcSAUM02eOktwfkIvEah94D8VrmTt5n2odCFDjQxv7pNVeNM4cD1WW_m1jhxDwFlVgUc0-NbMOIyYxaKjQ2OCxABRWMLo4vLchei0ZFL8RcrbNhG7Kej88JXOG-88yj7A4
 
 ### User Details
 GET {{host}}/auth/user HTTP/1.1
@@ -87,7 +87,7 @@ Authorization: Bearer {{token}}
 app-role: employee
 
 {
-   
+
 
 }
 ################
@@ -98,13 +98,54 @@ Authorization: Bearer {{token}}
 app-role: employee
 
 {
+    "employee_id": 13,
+    "project_id": 3,
     "title": "Task Title",
-    "project_id": 1,
     "description": "Task Description",
     "dependency": "Dependency Value",
     "delay_reason": "Reason for Delay",
     "start_date": "2023-09-05",
-    "end_date": "2023-09-10"
+    "end_date": "2023-09-10",
+    "status": "to_do"
+}
+################
+## show auth task list
+GET {{host}}/employee/task/list HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+app-role: employee
+
+{
+    
+
+
+}
+
+### Update auth task list
+POST {{host}}/employee/task/update
+content-type: application/json
+app-role: owner
+Authorization: Bearer {{token}}
+
+{
+    "project_id": 4,
+    "title": "Task -Api",
+    "description": "Task Description",
+    "dependency": "Dependency Value",
+    "delay_reason": "Reason for Delay",
+    "start_date": "2023-09-05",
+    "end_date": "2023-09-10",
+    "status": "on_going"
+}
+
+### delete auth task list
+POST {{host}}/employee/task/delete HTTP/1.1
+content-type: application/json
+app-role: owner
+Authorization: Bearer {{token}}
+
+{
+    "id": 4,
 }
 
 

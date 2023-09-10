@@ -21,6 +21,7 @@ class TaskResource extends JsonResource
             'dependency' => $this->dependency,
             'delay_reason' => $this->delay_reason,
             'start_date' => $this->start_date,
+            'status' => $this->status,
             'end_date' => $this->end_date,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,

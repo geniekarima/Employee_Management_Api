@@ -78,10 +78,30 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
     }
-    public function addTask(TaskRequest $request)
+    public function addTask(Request $request)
     {
         try {
             $data = $this->ownerEmployeeRepository->addTask($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function taskList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->taskList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function authTaskList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskList($request, request()->header('app_role'));
             return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
         } catch (Exception $e) {
             return Base::exception_fail($e);
@@ -97,6 +117,24 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
 
+    }
+    public function authTaskUpdate(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskUpdate($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function authTaskDelete(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskDelete($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
     }
     public function addProject(Request $request)
     {
