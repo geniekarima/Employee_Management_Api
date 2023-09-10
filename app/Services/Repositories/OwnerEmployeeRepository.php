@@ -13,6 +13,7 @@ use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\AssignProjectResource;
 use App\Http\Resources\EmployeeReportResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\EmployeeBreak;
@@ -262,9 +263,22 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 return Base::fail('You are not logged in');
             }
 
-            $data = Task::where('employee_id', $user->id)->get();
+            // $data = Task::where('employee_id', $user->id)
+            // ->orderBy('created_at', 'desc')
+            // ->get();
 
-            return Base::pass('Your Task List', $data);
+            $assignments = User::with('projects.tasks')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            // $assignments = User::with(['projects.tasks' => function ($query) {
+            //     $query->whereColumn('tasks.employee_id', 'users.id'); // Replace 'user_id' with the correct column name
+            // }])
+            // ->orderBy('created_at', 'desc')
+            // ->get();
+
+
+            return Base::pass('Your Task List', $assignments);
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -351,7 +365,9 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
     public function taskList($request)
     {
         try {
-            $data = Task::all();
+            $data = Task::all()
+            ->orderBy('created_at', 'desc')
+            ->get();
             return Base::pass('All Employees Task List', $data);
         } catch (Exception $e) {
             return Base::exception_fail($e);
@@ -462,9 +478,15 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 return Base::fail('You are not logged in');
             }
 
-            $assignments = ProjectAssign::with(['user', 'project'])
-                ->orderBy('created_at', 'desc')
-                ->get();
+            // $assignments = ProjectAssign::with(['user', 'project'])
+            //     ->orderBy('created_at', 'desc')
+            //     ->get();
+
+            $assignments = User::with('projects')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+                // $data = new AssignProjectResource($assignments);
 
             return Base::pass('Project assignments retrieved successfully', $assignments);
         } catch (Exception $e) {

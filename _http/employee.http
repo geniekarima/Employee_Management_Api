@@ -1,7 +1,7 @@
 @host = http://127.0.0.1:8000/api
 # @host =https://ems.ctgsociety.org/api
 
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzJlMWQ2MGJmN2E5MWZkNWM2YjhhOGQzOGUzNTAyZTdiNzRkNmQyMjBiZWRjZTg1MDk1Y2Q4OGZkN2JjMjI5MDMzNDk5NTBmOTQ2ZmUyODQiLCJpYXQiOjE2OTQzNDEyMzIuMTE0NDg1LCJuYmYiOjE2OTQzNDEyMzIuMTE0NDg4LCJleHAiOjE3MjU5NjM2MzIuMTA4NTc4LCJzdWIiOiIxMyIsInNjb3BlcyI6W119.W9qCRrEh0MgCV7vh3DI899mfxv1DVyXJptJMN9U1ztjxBeqKLu_y_2X3isqgjAFr0tbo7luXPEGH4fYDxhJmWnygOS32NCqZ384cw2KLswGpduKFC-MxQv242rLeebxfucLjoF686ZtVImbJEK48z-GO4Jdlg4CQmdoWIQh4ESK5TRwD58HYQsaoECXpwv8iLn_fkDgOy48ih858d4UnV7UWXPhQg8NEJbzS478Z8m0KL-V9Rd5mgghcAm-JgNETjnG-TgC8Gn21NtOQujr5LaZ3N_acbAs-mfQE0KZGZMWEhghBvt9kfH7l-kMOP3Zoo2NIcq2a-Bo75PJfFxL3-lt6VgRTxnsLGV4tLDhPl0JzK1YkE1jM-q7VeifnyY3sLaV_VaxhiMp5kAXumvrY4eL3eU4GjjfyMfGh20lPCv6tSIadZDDcQVXt3jHzKiCojLaYQhNb9wINHwKSVuX9Ox3pX68X4EaRPUfUzdjuyZHKYqOENwh_EONMUhzQjdUbDTzfyUG_QqPvzOGoM84IgwlA8WvUohMT1DrFhsXH4QcSAUM02eOktwfkIvEah94D8VrmTt5n2odCFDjQxv7pNVeNM4cD1WW_m1jhxDwFlVgUc0-NbMOIyYxaKjQ2OCxABRWMLo4vLchei0ZFL8RcrbNhG7Kej88JXOG-88yj7A4
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZWYxMzY0YWRkMjhmNzFjOTQ1NjdjMGQwYmZmYTQ0N2Y1N2U1MjM5MzBjN2I2ZGNjMmQ2ZDEyYjVhMjI5YjM3Y2UwNjQyYWE0MWIyMjg3YTMiLCJpYXQiOjE2OTQzNjQ1NDMuMDUxNzY2LCJuYmYiOjE2OTQzNjQ1NDMuMDUxNzY4LCJleHAiOjE3MjU5ODY5NDMuMDQ0Njk3LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.qIkqH7cA3D0zXVhr5Obd01HQjPG5yKX5PzKfPonKtIIuYGbqdLD4gg7vdvpzaiOOFDLxSY_LLndD-nQGeiRcp17SITy2zU8GRed8dE7-Va9gx3xbS3NmerSuUeuzzQijSBWfbfXXQTlRDAPjrpFnN4xe9VoS2HNFD_YsF2ZhBCfEjdPfYgXpnn0n-oW_4P3ApUPe2ww78Pz7PWfifG2GAboM1kEpYItIESEJqAx8_zZiDR_ptHHjbe-pcnvZsorZb5KdGVdQccuYW0VMdfvIfUvW_x5WB8PGh19zKbmJwyP8O4so-cv-cFfaJpxp5h5CcQqcjISzdhRm_rvjPJwTkNt-XPZPN9Z_AZgeEehAFA416SvoJxPK3DJbBWJQlZz5xx5B4J3PtiGARfgcCb_TmC8qNxSQuWHD7vp1_4WJM6-u-peTClJDi6ksjbJ5dFNCCcqZ-_m-0gE2V6UPSRFNJ4zgPKyPnQvw4EDQfGdtaeYRZAmeo7cJhT4ITtpO-YzoizRC1uTk9dg91LjTvEtYmTeU0LWrywvpCqUOLaCVDLqw3EwhhgIGndOqW6uRQzUvWNAAm5VNU6tYwX1edLtj_TfOGYOzUGCI5EYfA5EYBf3MHmtUGslxP2U3XwyaszZvDnXwIFScV3MtlxAGYr356AMyUzj-71_SMypF7nuWYeU
 
 ### User Details
 GET {{host}}/auth/user HTTP/1.1
@@ -16,7 +16,7 @@ Content-Type: application/json
 app-role: employee
 
 {
-  "email": "jeri1@gmail.com",
+  "email": "karimaddddzg@gmail.com",
   "password": "123456"
 
 }
@@ -98,9 +98,9 @@ Authorization: Bearer {{token}}
 app-role: employee
 
 {
-    "employee_id": 13,
-    "project_id": 3,
-    "title": "Task Title",
+#    "employee_id": 5,
+    "project_id": 2,
+    "title": "Task Title more",
     "description": "Task Description",
     "dependency": "Dependency Value",
     "delay_reason": "Reason for Delay",
@@ -116,7 +116,7 @@ Authorization: Bearer {{token}}
 app-role: employee
 
 {
-    
+
 
 
 }

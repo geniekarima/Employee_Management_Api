@@ -36,6 +36,44 @@ class User extends Authenticatable
     {
         return $this->hasMany(EmployeeReport::class,);
     }
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_assigns','employee_id', 'project_id'); // Assuming the pivot table is named 'assign_projects'
+    }
+
+    public function tasks()
+    {
+        return Task::where('employee_id', $this->getAttribute('employee_id'));
+    }
+
+    // public function tasks()
+    // {
+    //     return $this->hasMany(Task::class, 'employee_id')->where('employee_id', $this->getAttribute('employee_id'));
+    // }
+
+
+
+    // public function projectAssigns()
+    // {
+    //     return $this->hasMany(ProjectAssign::class, 'employee_id');
+    // }
+
+    // public function tasksByProjectAndEmployee()
+    // {
+    //     return $this->hasManyThrough(Task::class, ProjectAssign::class, 'employee_id', 'project_id', 'id', 'project_id')
+    //             ;
+    // }
+
+    //  public function tasks()
+    // {
+    //     return $this->hasManyThrough(Task::class, ProjectAssign::class, 'employee_id', 'project_id', 'id', 'project_id');
+    // }
+
+    public function assignProjects()
+    {
+        return $this->hasMany(AssignProject::class);
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
