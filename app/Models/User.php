@@ -38,7 +38,7 @@ class User extends Authenticatable
     }
     public function projects()
     {
-        return $this->belongsToMany(Project::class, 'project_assigns','employee_id', 'project_id'); // Assuming the pivot table is named 'assign_projects'
+        return $this->belongsToMany(Project::class, 'project_assigns','employee_id', 'project_id'); 
     }
 
     public function tasks()

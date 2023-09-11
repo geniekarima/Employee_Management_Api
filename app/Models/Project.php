@@ -23,6 +23,6 @@ class Project extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'project_assigns'); // Assuming the pivot table is named 'assign_projects'
+        return $this->belongsToMany(User::class, 'project_assigns'); 
     }
 }

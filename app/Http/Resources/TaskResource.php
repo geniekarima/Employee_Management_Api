@@ -15,10 +15,10 @@ class TaskResource extends JsonResource
     public function toArray(Request $request): array
     {
         return[
-            'username' => $this->username,
-            'email' => $this->email,
-            'projects' => $this->projects,
-            
+            // 'username' => $this->username,
+            // 'email' => $this->email,
+            // 'projects' => $this->projects,
+
             // 'description' => $this->description,
             // 'dependency' => $this->dependency,
             // 'delay_reason' => $this->delay_reason,

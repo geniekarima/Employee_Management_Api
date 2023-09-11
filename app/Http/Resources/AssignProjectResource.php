@@ -17,8 +17,8 @@ class AssignProjectResource extends JsonResource
         // return parent::toArray($request);
         return [
 
-                'Employee' => $this->user,
-                'assigned_projects' => $this->project,
+                // 'employee_info' => $this->user->username,
+                // 'assigned_projects' => $this->project,
 
         ];
     }

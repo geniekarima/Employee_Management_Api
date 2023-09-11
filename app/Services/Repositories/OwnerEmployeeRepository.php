@@ -267,9 +267,9 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             // ->orderBy('created_at', 'desc')
             // ->get();
 
-            $assignments = User::with('projects.tasks')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            $tasks = User::with('projects.tasks')->where('id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
 
             // $assignments = User::with(['projects.tasks' => function ($query) {
             //     $query->whereColumn('tasks.employee_id', 'users.id'); // Replace 'user_id' with the correct column name
@@ -278,7 +278,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             // ->get();
 
 
-            return Base::pass('Your Task List', $assignments);
+            return Base::pass('Your Task List', $tasks);
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -292,10 +292,15 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 return Base::fail('You are not logged in');
             }
 
-            $task = Task::where('employee_id', $user->id)->first();
+            $task = Task::findOrFail($request->id);
 
-            if (!$task) {
+            if (!$user->projects->contains($task->project_id)) {
                 return Base::fail('Task not found or not assigned to you');
+            }
+            $projectExists = Project::where('id', $request->input('project_id'))->exists();
+
+            if (!$projectExists) {
+                return Base::fail('Invalid project ID provided');
             }
 
             $task->update($request->all());
@@ -305,6 +310,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+
     public function authTaskDelete(Request $request)
     {
         try {
@@ -314,10 +320,10 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
                 return Base::fail('You are not logged in');
             }
 
-            $task = Task::where('employee_id', $user->id)->first();
+            $task = Task::find($request->id);
 
             if (!$task) {
-                return Base::fail('Task not found or not assigned to you');
+                return Base::fail('Task not found');
             }
 
             $task->delete();
@@ -365,10 +371,17 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
     public function taskList($request)
     {
         try {
-            $data = Task::all()
-            ->orderBy('created_at', 'desc')
-            ->get();
-            return Base::pass('All Employees Task List', $data);
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $tasks = User::with('projects.tasks')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // $data = Task::orderBy('created_at', 'desc')->get();
+            return Base::pass('All Employees Task List', $tasks);
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -482,11 +495,11 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             //     ->orderBy('created_at', 'desc')
             //     ->get();
 
-            $assignments = User::with('projects')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            $assignments = User::with('projects')->where('usertype', 'employee')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-                // $data = new AssignProjectResource($assignments);
+            // $data = new AssignProjectResource($assignments);
 
             return Base::pass('Project assignments retrieved successfully', $assignments);
         } catch (Exception $e) {
@@ -573,8 +586,5 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
-
-
-
 
 }
