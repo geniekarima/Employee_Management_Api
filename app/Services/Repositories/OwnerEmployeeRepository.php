@@ -175,6 +175,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $sortBy = $request->input('sort_by', 'date');
 
             $reports = EmployeeReport::with('user', 'breakTasks')
+                ->whereNotNull('check_out')
                 ->when(isset($request->fromdate), function ($q) use ($request) {
                     return $q->where('date', '>=', $request->fromdate);
                 })

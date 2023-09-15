@@ -144,11 +144,13 @@ trait Base
     public static function convertDateTime($start_time, $end_time)
     {
         $start_time = self::timeParse($start_time);
-        $end_time = self::timeParse($end_time);
-
         $checkIn = Carbon::createFromFormat('H:i',$start_time);
-        $checkOut = Carbon::createFromFormat('H:i',$end_time);
 
+        $checkOut = 0;
+        if(!empty($end_time)){
+            $end_time = self::timeParse($end_time);
+            $checkOut = Carbon::createFromFormat('H:i',$end_time);
+        }
         $workDurationInMinutes = CarbonInterval::minutes($checkIn->diffInMinutes($checkOut))->totalMinutes;
 
         $netWorkHours = floor($workDurationInMinutes / 60);
