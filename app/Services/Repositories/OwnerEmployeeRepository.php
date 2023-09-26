@@ -13,14 +13,14 @@ use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\AssignProjectResource;
 use App\Http\Resources\EmployeeReportResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\EmployeeBreak;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendpdfNotification;
 use App\Models\EmployeeReport;
-
-
+use App\Models\ProjectAssign;
 use Carbon\Carbon;
 
 class OwnerEmployeeRepository implements OwnerEmployeeInterface
@@ -75,6 +75,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $checkIn->date = date('Y-m-d');
             $checkIn->save();
             return Base::pass('Check In Successfully', $checkIn);
+
 
         } catch (Exception $e) {
             return Base::exception_fail($e);
@@ -174,6 +175,7 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             $sortBy = $request->input('sort_by', 'date');
 
             $reports = EmployeeReport::with('user', 'breakTasks')
+                ->whereNotNull('check_out')
                 ->when(isset($request->fromdate), function ($q) use ($request) {
                     return $q->where('date', '>=', $request->fromdate);
                 })
@@ -233,6 +235,106 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+    public function authProjectList(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $assignedProjects = ProjectAssign::where('employee_id', $user->id)
+                ->with('project')
+                ->get();
+
+            $projects = $assignedProjects->pluck('project');
+
+
+            return Base::pass('Your Assigned project list', $projects);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function authTaskList(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return Base::fail('You are not logged in');
+            }
+
+            // $data = Task::where('employee_id', $user->id)
+            // ->orderBy('created_at', 'desc')
+            // ->get();
+
+            $tasks = User::with('projects.tasks')->where('id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // $assignments = User::with(['projects.tasks' => function ($query) {
+            //     $query->whereColumn('tasks.employee_id', 'users.id'); // Replace 'user_id' with the correct column name
+            // }])
+            // ->orderBy('created_at', 'desc')
+            // ->get();
+
+
+            return Base::pass('Your Task List', $tasks);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function authTaskUpdate(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return Base::fail('You are not logged in');
+            }
+
+            $task = Task::findOrFail($request->id);
+
+            if (!$user->projects->contains($task->project_id)) {
+                return Base::fail('Task not found or not assigned to you');
+            }
+            $projectExists = Project::where('id', $request->input('project_id'))->exists();
+
+            if (!$projectExists) {
+                return Base::fail('Invalid project ID provided');
+            }
+
+            $task->update($request->all());
+
+            return Base::pass('Task updated successfully', $task);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+
+    public function authTaskDelete(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return Base::fail('You are not logged in');
+            }
+
+            $task = Task::find($request->id);
+
+            if (!$task) {
+                return Base::fail('Task not found');
+            }
+
+            $task->delete();
+
+            return Base::pass('Task deleted successfully');
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+
     public function addTask(Request $request)
     {
         try {
@@ -241,18 +343,46 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             if (!$user)
                 return Base::fail('You are not logged in');
 
+            $projectAssignment = ProjectAssign::where('employee_id', $user->id)
+                ->where('project_id', $request->project_id)
+                ->first();
+
+            if (!$projectAssignment) {
+                return Base::fail('You are not assigned to this project');
+            }
+
             $task = Task::create([
-                'title' => $request->title,
+                'employee_id' => $user->id,
                 'project_id' => $request->project_id,
+                'title' => $request->title,
                 'description' => $request->description,
                 'dependency' => $request->dependency,
                 'delay_reason' => $request->delay_reason,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
+                'status' => $request->status,
             ]);
 
-            $task = new TaskResource($task);
+            // $task = new TaskResource($task);
             return Base::pass('Task created successfully', $task);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function taskList($request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user)
+                return Base::fail('You are not logged in');
+
+            $tasks = User::with('projects.tasks')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // $data = Task::orderBy('created_at', 'desc')->get();
+            return Base::pass('All Employees Task List', $tasks);
         } catch (Exception $e) {
             return Base::exception_fail($e);
         }
@@ -273,4 +403,189 @@ class OwnerEmployeeRepository implements OwnerEmployeeInterface
             return Base::exception_fail($e);
         }
     }
+    public function updateProject($request)
+    {
+        try {
+            $authenticatedUser = Auth::user();
+
+            if (!$authenticatedUser)
+                return Base::fail('You are not logged in');
+
+            $project = Project::find($request->id);
+
+            if (!isset($project)) {
+                return Base::fail('Project not found!');
+            }
+            $project->name = isset($request->name) ? $request->name : $project->name;
+            $project->status = isset($request->status) ? $request->status : $project->status;
+            $project->save();
+
+            return Base::pass('Project name Updated!', $project);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function deleteProject($request)
+    {
+        try {
+            $project = Project::find($request->id);
+            if (!isset($project))
+                return Base::fail('Project not found');
+            $project->delete();
+
+            return Base::pass('Project Deleted Successfully');
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectList($request)
+    {
+        try {
+            $data = Project::all();
+            return Base::pass('All Project List', $data);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignAdd(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+
+            $project = Project::find($request->project_id);
+            if (!$project) {
+                return Base::fail('Project not found');
+            }
+
+            $user = User::find($request->employee_id);
+            if (!$user) {
+                return Base::fail('User not found');
+            }
+
+            $projectassign = ProjectAssign::where('employee_id', $user->id)
+                ->where('project_id', $project->id)
+                ->first();
+
+            if ($projectassign) {
+                return Base::fail('Project already assigned to this user');
+            }
+
+            $newAssignment = new ProjectAssign();
+            $newAssignment->employee_id = $user->id;
+            $newAssignment->project_id = $project->id;
+            $newAssignment->save();
+
+            return Base::pass('Project assigned successfully', $newAssignment);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignList(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+
+            // $assignments = ProjectAssign::with(['user', 'project'])
+            //     ->orderBy('created_at', 'desc')
+            //     ->get();
+
+            $assignments = User::with('projects')->where('usertype', 'employee')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // $data = new AssignProjectResource($assignments);
+
+            return Base::pass('Project assignments retrieved successfully', $assignments);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignUpdate(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+            $assignment = ProjectAssign::find($request->id);
+
+            if (!$assignment) {
+                return Base::fail('Project assignment not found');
+            }
+
+            $user = User::find($request->employee_id);
+            if (!$user) {
+                return Base::fail('User not found');
+            }
+
+            $project = Project::find($request->project_id);
+            if (!$project) {
+                return Base::fail('Project not found');
+            }
+
+            $assignment->employee_id = $user->id;
+            $assignment->project_id = $project->id;
+            $assignment->save();
+
+            return Base::pass('Project assignment updated successfully', $assignment);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    // public function projectAssignDelete(Request $request)
+    // {
+    //     try {
+    //         $authuser = Auth::user();
+    //         if (!$authuser) {
+    //             return Base::fail('You are not logged in');
+    //         }
+
+    //         $assignment = ProjectAssign::find($request->id);
+
+    //         if (!$assignment) {
+    //             return Base::fail('Project assignment not found');
+    //         }
+
+    //         $assignment->delete();
+
+    //         return Base::pass('Project assignment deleted successfully');
+    //     } catch (Exception $e) {
+    //         return Base::exception_fail($e);
+    //     }
+    // }
+    public function projectAssignDelete(Request $request)
+    {
+        try {
+            $authuser = Auth::user();
+            if (!$authuser) {
+                return Base::fail('You are not logged in');
+            }
+
+            $employee_id = $request->input('employee_id');
+            $project_id = $request->input('project_id');
+
+
+            $assignment = ProjectAssign::where('employee_id', $employee_id)
+                ->where('project_id', $project_id)
+                ->first();
+
+            if (!$assignment) {
+                return Base::fail('Project assignment not found');
+            }
+
+            $assignment->delete();
+
+            return Base::pass('Project assignment deleted successfully');
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+
 }

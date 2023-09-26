@@ -78,7 +78,7 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
     }
-    public function addTask(TaskRequest $request)
+    public function addTask(Request $request)
     {
         try {
             $data = $this->ownerEmployeeRepository->addTask($request, request()->header('app_role'));
@@ -88,7 +88,54 @@ class OwnerEmployeeController extends Controller
         }
 
     }
+    public function taskList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->taskList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
 
+    }
+    public function authTaskList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function authProjectList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authProjectList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function authTaskUpdate(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskUpdate($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function authTaskDelete(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->authTaskDelete($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
     public function addProject(Request $request)
     {
         try {
@@ -98,5 +145,72 @@ class OwnerEmployeeController extends Controller
             return Base::exception_fail($e);
         }
 
+    }
+    public function projectList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function updateProject(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->updateProject($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function deleteProject(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->deleteProject($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    //assign project
+    public function projectAssignAdd(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignAdd($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function projectAssignList(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignList($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+
+    }
+    public function projectAssignUpdate(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignUpdate($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
+    }
+    public function projectAssignDelete(Request $request)
+    {
+        try {
+            $data = $this->ownerEmployeeRepository->projectAssignDelete($request, request()->header('app_role'));
+            return $data->success ? Base::success($data->message, $data->data) : Base::error($data->message);
+        } catch (Exception $e) {
+            return Base::exception_fail($e);
+        }
     }
 }

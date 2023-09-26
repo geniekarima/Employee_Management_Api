@@ -24,7 +24,10 @@ class EmployeeReport extends Model
     public function getNetWorkHoursAttribute()
     {
         $checkIn = Carbon::createFromFormat('H:i:s', $this->check_in);
-        $checkOut = Carbon::createFromFormat('H:i:s', $this->check_out);
+        $checkOut = 0;
+        if(!empty($this->check_out)){
+            $checkOut = Carbon::createFromFormat('H:i:s', $this->check_out);
+        }
 
         $workDurationInMinutes = CarbonInterval::minutes($checkIn->diffInMinutes($checkOut))->totalMinutes;
 
